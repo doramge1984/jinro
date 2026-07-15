@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>나의 진로 성향 테스트</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{min-height:100vh;font-family:'Pretendard','Malgun Gothic',sans-serif;
+    background:linear-gradient(135deg,#EAF0FD 0%,#FDEBF2 50%,#EAF9F1 100%);
+    display:flex;align-items:center;justify-content:center;padding:24px;color:#33323a}
+  .wrap{width:100%;max-width:560px}
+  .panel{background:#fff;border-radius:24px;box-shadow:0 14px 44px rgba(120,110,160,.18);padding:30px 26px}
+  h1{text-align:center;font-size:1.7rem;font-weight:800;margin-bottom:4px}
+  .sub{text-align:center;color:#8a8794;margin-bottom:22px}
+  .bar{height:9px;background:#EEE9F5;border-radius:999px;overflow:hidden;margin-bottom:20px}
+  .bar>i{display:block;height:100%;background:linear-gradient(90deg,#B58BE0,#8AA6E8);width:0;transition:width .3s}
+  .qnum{color:#9a86c4;font-weight:800;font-size:.92rem;margin-bottom:6px}
+  .q{font-size:1.35rem;font-weight:800;line-height:1.4;margin-bottom:18px}
+  .opt{display:block;width:100%;text-align:left;border:1.5px solid #E5DFEC;background:#FAF8FD;
+    border-radius:14px;padding:15px 18px;font-size:1.05rem;font-family:inherit;cursor:pointer;margin:10px 0;transition:.15s;color:#3a3852}
+  .opt:hover{border-color:#B58BE0;background:#F3ECFB;transform:translateY(-1px)}
+  .center{text-align:center}
+  .btn{border:none;border-radius:14px;padding:14px 26px;font-size:16px;font-weight:800;cursor:pointer;
+    background:linear-gradient(135deg,#B58BE0,#8AA6E8);color:#fff;box-shadow:0 8px 20px rgba(140,120,210,.3);margin-top:18px}
+  .btn.ghost{background:#fff;color:#8AA6E8;border:1.5px solid #C9D6F2;box-shadow:none}
+  /* result */
+  .r-emoji{font-size:3.2rem}
+  .r-type{font-family:'Noto Serif KR',serif;font-size:2rem;font-weight:800;color:#5a3e9e;margin:8px 0}
+  .r-desc{font-size:1.12rem;color:#4a4860;line-height:1.6;margin-bottom:18px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0 6px}
+  .chip{background:#F0E9FB;color:#6a4bb0;font-weight:700;border-radius:999px;padding:8px 16px;font-size:1rem}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="panel">
+    <h1>🧭 나의 진로 성향 테스트</h1>
+    <p class="sub">8개 질문에 답하면 나의 진로 성향이 나와요.</p>
+
+    <!-- 질문 -->
+    <div id="quiz">
+      <div class="bar"><i id="prog"></i></div>
+      <div class="qnum" id="qnum"></div>
+      <div class="q" id="qtext"></div>
+      <div id="opts"></div>
+    </div>
+
+    <!-- 결과 -->
+    <div id="result" class="hidden center">
+      <div class="r-emoji" id="r-emoji"></div>
+      <div class="r-type" id="r-type"></div>
+      <div class="r-desc" id="r-desc"></div>
+      <div style="font-weight:800;color:#9a86c4;font-size:.9rem;letter-spacing:.04em">어울리는 직업</div>
+      <div class="chips" id="r-jobs"></div>
+      <button class="btn ghost" onclick="restart()">↻ 다시 하기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var TYPES={
+  탐구:{emoji:"🔬",name:"탐구형",desc:"궁금한 것을 파고들어 원리를 밝히는 걸 좋아해요. 분석하고 깊이 생각할 때 빛나는 유형이에요.",jobs:["데이터 분석가","연구원","의사","AI 엔지니어","심리학자"]},
+  예술:{emoji:"🎨",name:"예술형",desc:"새로운 것을 표현하고 창작할 때 에너지가 나요. 상상을 형태로 만드는 걸 즐기는 유형이에요.",jobs:["디자이너","웹툰 작가","영상 크리에이터","건축가","음악가"]},
+  사회:{emoji:"🤝",name:"사회형",desc:"사람을 돕고 소통할 때 가장 행복해요. 함께하고 이끌 때 강점이 드러나는 유형이에요.",jobs:["교사","상담사","간호사","사회복지사","마케터"]},
+  실용:{emoji:"🛠️",name:"실용형",desc:"직접 만들고 몸으로 실행하는 걸 좋아해요. 눈에 보이는 결과를 만들 때 신나는 유형이에요.",jobs:["엔지니어","요리사","정비사","운동선수","메이커·창업가"]}
+};
+var Q=[
+ {q:"자유 시간이 생기면 나는?",a:[["탐구","궁금한 걸 검색하며 파고든다"],["예술","그림·음악·영상을 만든다"],["사회","친구들과 어울려 논다"],["실용","뭔가 직접 만들거나 고친다"]]},
+ {q:"모둠 활동에서 내 역할은?",a:[["사회","의견을 모으고 이끄는 리더"],["탐구","자료를 조사하고 분석하는 사람"],["예술","발표 자료를 예쁘게 디자인"],["실용","실제로 만들고 실행하는 사람"]]},
+ {q:"칭찬받으면 기분 좋은 말은?",a:[["예술","창의적이다·감각 있다"],["탐구","똑똑하다·논리적이다"],["사회","따뜻하다·잘 도와준다"],["실용","손재주 좋다·야무지다"]]},
+ {q:"박물관·전시에 가면 나는?",a:[["탐구","원리와 설명을 꼼꼼히 읽는다"],["예술","작품의 색·분위기에 빠진다"],["실용","어떻게 만들었는지 궁금하다"],["사회","같이 온 사람과 이야기 나눈다"]]},
+ {q:"새 프로젝트를 시작할 때 먼저?",a:[["실용","일단 만들면서 부딪혀 본다"],["탐구","자료부터 조사하고 계획한다"],["사회","함께할 사람들과 역할을 나눈다"],["예술","전체 컨셉과 느낌을 떠올린다"]]},
+ {q:"내가 더 끌리는 문제는?",a:[["탐구","왜 이런 일이 생길까?"],["사회","어떻게 사람들을 도울까?"],["예술","어떻게 더 멋지게 표현할까?"],["실용","어떻게 실제로 작동하게 할까?"]]},
+ {q:"수업 중 가장 재미있는 순간은?",a:[["예술","자유롭게 표현하는 활동"],["실용","직접 실험·실습하는 활동"],["탐구","깊이 있는 토론·탐구"],["사회","친구를 돕고 함께하는 활동"]]},
+ {q:"미래의 나를 떠올리면?",a:[["사회","사람들에게 도움이 되는 사람"],["탐구","한 분야의 전문가"],["예술","나만의 색을 가진 창작자"],["실용","무언가를 직접 만들어내는 사람"]]}
+];
+var idx=0, score={탐구:0,예술:0,사회:0,실용:0};
+
+function render(){
+  var q=Q[idx];
+  document.getElementById("qnum").textContent="Q"+(idx+1)+" / "+Q.length;
+  document.getElementById("qtext").textContent=q.q;
+  document.getElementById("prog").style.width=(idx/Q.length*100)+"%";
+  var box=document.getElementById("opts"); box.innerHTML="";
+  // 보기 순서 섞기
+  var opts=q.a.slice().sort(function(){return Math.random()-0.5;});
+  opts.forEach(function(o){
+    var b=document.createElement("button"); b.className="opt"; b.textContent=o[1];
+    b.onclick=function(){score[o[0]]++; idx++; if(idx<Q.length) render(); else show();};
+    box.appendChild(b);
+  });
+}
+function show(){
+  var best="탐구",max=-1;
+  for(var k in score){if(score[k]>max){max=score[k];best=k;}}
+  var t=TYPES[best];
+  document.getElementById("quiz").classList.add("hidden");
+  var r=document.getElementById("result"); r.classList.remove("hidden");
+  document.getElementById("r-emoji").textContent=t.emoji;
+  document.getElementById("r-type").textContent="당신은 "+t.name+"!";
+  document.getElementById("r-desc").textContent=t.desc;
+  document.getElementById("r-jobs").innerHTML=t.jobs.map(function(j){return '<span class="chip">'+j+'</span>';}).join("");
+}
+function restart(){idx=0;score={탐구:0,예술:0,사회:0,실용:0};
+  document.getElementById("result").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");render();}
+render();
+</script>
+</body>
+</html>

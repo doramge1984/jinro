@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>인천 진로교사를 위한 바이브코딩 연수 · 웹 교안</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --primary:#F7500F; --primary-deep:#D63E00;
+    --sunshine-500:#FFB02E; --sunshine-700:#F98D0A; --sunshine-900:#D6540A;
+    --yellow:#FFD400;
+    --cream:#FBEFD6; --cream-soft:#FDF7EA; --cream-deeper:#F3E1BE; --beige-deep:#E6D3AC;
+    --canvas:#FFFFFF; --surface:#FAF9F5; --surface-cream:#FBF3E3;
+    --code-bg:#1E1E24; --code-ink:#ECECE4;
+    --ink:#161616; --charcoal:#2A2A28; --slate:#55554E; --steel:#7A7970; --stone:#9A998E;
+    --hairline:#E7E3DA; --hairline-soft:#EFECE4; --hairline-strong:#CDC8BB;
+    --serif:'Noto Serif KR','PP Editorial Old',Georgia,serif;
+    --sans:'Pretendard','Inter',-apple-system,system-ui,sans-serif;
+    --mono:'JetBrains Mono',Consolas,Menlo,monospace;
+    --maxw:1480px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--surface); color:var(--ink);
+    font-family:var(--sans); font-size:20px; line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px}
+
+  /* ---------- fixed top bar ---------- */
+  .topbar{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(255,255,255,.92); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--hairline-soft);
+  }
+  .topbar .inner{
+    max-width:var(--maxw); margin:0 auto; padding:0 28px;
+    display:flex; align-items:center; gap:22px; height:66px;
+  }
+  .brand{display:flex; align-items:center; gap:10px; flex:0 0 auto}
+  .brand .m{
+    width:30px; height:30px; border-radius:8px; flex:0 0 auto;
+    background:linear-gradient(135deg,var(--sunshine-700),var(--primary));
+  }
+  .brand .wm{font-weight:700; font-size:.82rem; letter-spacing:.14em; color:var(--ink)}
+  .tabs{display:flex; gap:4px; overflow-x:auto; scrollbar-width:none; margin-left:auto}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{
+    flex:0 0 auto; border:none; background:none; cursor:pointer;
+    font-family:var(--sans); font-size:1.04rem; font-weight:500; color:var(--steel);
+    padding:9px 15px; border-radius:8px; white-space:nowrap; transition:.15s;
+  }
+  .tab:hover{color:var(--ink); background:var(--surface-cream)}
+  .tab.active{color:var(--primary); background:var(--cream-soft); font-weight:600}
+
+  /* ---------- panels ---------- */
+  main{padding-top:66px}
+  /* sidebar TOC */
+  #sidebar{position:fixed; left:0; top:66px; bottom:0; width:250px; background:var(--surface-cream); border-right:1px solid var(--hairline); overflow-y:auto; padding:18px 14px; z-index:50}
+  #sidebar .toc-title{font-weight:800; color:var(--primary-deep); font-size:1.02rem; margin:4px 8px 12px}
+  .toc-item{display:block; color:var(--slate); text-decoration:none; font-size:.98rem; padding:8px 10px; border-radius:8px; line-height:1.4; cursor:pointer}
+  .toc-item:hover{background:var(--cream-deeper); color:var(--ink)}
+  .toc-item.h2{font-weight:700; color:var(--ink); margin-top:8px}
+  .toc-item.sub{padding-left:22px; font-size:.9rem; color:var(--steel)}
+  h2, h3{scroll-margin-top:82px}
+  @media(min-width:1100px){ body{padding-left:250px} .topbar{padding-left:250px} }
+  @media(max-width:1099px){ #sidebar{display:none} }
+  body.home-active #sidebar{display:none}
+  @media(min-width:1100px){ body.home-active{padding-left:0} body.home-active .topbar{padding-left:0} }
+  .panel section.block > h3{margin-top:11em}
+  .panel .section-box{margin:11em 0}
+  .panel{display:none; animation:fade .25s ease}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0; transform:translateY(6px)}to{opacity:1; transform:none}}
+
+  /* ---------- hero ---------- */
+  .hero{
+    background:linear-gradient(135deg,var(--sunshine-700) 0%,var(--sunshine-900) 55%,var(--primary) 100%);
+    color:#fff; position:relative; overflow:hidden;
+  }
+  .hero::after{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(120% 90% at 85% 10%,rgba(255,220,120,.45),transparent 60%);
+    pointer-events:none;
+  }
+  .hero .wrap{padding:78px 28px 74px; position:relative; z-index:1}
+  .eyebrow{
+    font-size:.74rem; font-weight:600; letter-spacing:.16em; text-transform:uppercase;
+    opacity:.9; margin-bottom:16px;
+  }
+  .hero h1{
+    font-family:var(--serif); font-weight:600; font-size:clamp(2.4rem,5vw,3.8rem);
+    line-height:1.12; letter-spacing:-.02em; margin:0 0 18px; text-shadow:0 2px 20px rgba(0,0,0,.12);
+  }
+  .hero .sub{font-size:1.4rem; max-width:720px; opacity:.96; line-height:1.55}
+  .hero .meta{
+    margin-top:26px; display:flex; flex-wrap:wrap; gap:10px;
+  }
+  .hero .chip{
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.35);
+    border-radius:999px; padding:6px 15px; font-size:.9rem; font-weight:500;
+  }
+
+  /* ---------- sections / typography ---------- */
+  section.block{padding:56px 0 8px}
+  .kicker{
+    font-size:.76rem; font-weight:600; letter-spacing:.15em; text-transform:uppercase;
+    color:var(--primary); margin-bottom:10px;
+  }
+  h2{
+    font-family:var(--serif); font-weight:600; font-size:clamp(1.9rem,3.4vw,2.6rem);
+    line-height:1.18; letter-spacing:-.015em; margin:0 0 10px; color:var(--ink);
+  }
+  h3{font-size:1.62rem; font-weight:600; margin:6em 0 10px; color:var(--ink); letter-spacing:-.01em}
+  h4{font-size:1.24rem; font-weight:600; margin:18px 0 4px; color:var(--charcoal)}
+  .lead{font-size:1.3rem; color:var(--slate); margin:6px 0 20px; line-height:1.6}
+  p{margin:11px 0}
+  section.block p, .card p{font-size:1.14rem; line-height:1.72}
+
+  .card{
+    background:var(--canvas); border:1px solid var(--hairline-soft); border-radius:12px;
+    padding:26px 28px; margin:18px 0; box-shadow:0 4px 12px rgba(0,0,0,.03);
+  }
+  .card-cream{background:var(--cream); border:1px solid var(--beige-deep)}
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+  @media(max-width:720px){.grid{grid-template-columns:1fr}}
+  .cols3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; align-items:start}
+  .cols3 .col .card{margin:0 0 18px}
+  @media(max-width:960px){.cols3{grid-template-columns:1fr}}
+  .cmp{width:100%; border-collapse:collapse; margin:14px 0; font-size:1.08rem; background:var(--canvas); border:1px solid var(--hairline); border-radius:12px; overflow:hidden}
+  .cmp th,.cmp td{padding:13px 16px; text-align:left; vertical-align:top; border-bottom:1px solid var(--hairline-soft)}
+  .cmp thead th{background:var(--surface-cream); font-weight:700}
+  .cmp td:first-child{color:var(--steel); width:32%; border-right:1px solid var(--hairline-soft)}
+  .cmp tr:last-child td{border-bottom:none}
+  .ladder-num{display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:8px; background:var(--primary); color:#fff; font-weight:700; font-size:.95rem; margin-right:8px}
+  .tech details{margin:0 0 3.4em}
+  .tech details:last-child{margin-bottom:1.2em}
+  .section-box{background:var(--surface-cream); border:1px solid var(--beige-deep); border-radius:16px; padding:6px 26px 24px; margin:2em 0 6em}
+  .section-box h3:first-child{margin-top:1.2em}
+
+  ul.clean{margin:8px 0; padding-left:22px}
+  ul.clean li{margin:9px 0; font-size:1.14rem; line-height:1.66}
+
+  .flow{display:flex; flex-wrap:wrap; gap:12px; margin:18px 0}
+  .flow .step{
+    flex:1 1 200px; background:var(--surface-cream); border:1px solid var(--beige-deep);
+    border-radius:12px; padding:18px 20px;
+  }
+  .flow .step{font-size:1.1rem}
+  .flow .step b{display:block; font-family:var(--serif); font-size:1.28rem; color:var(--primary-deep); margin-bottom:4px}
+
+  .badge{
+    display:inline-block; font-size:.82rem; font-weight:600; padding:4px 12px;
+    border-radius:999px; margin-bottom:8px;
+  }
+  .badge.t{background:var(--cream-deeper); color:var(--primary-deep)}
+  .badge.s{background:var(--ink); color:#fff}
+
+  /* callouts */
+  .note,.tip{border-radius:0 12px 12px 0; padding:18px 22px; margin:18px 0; font-size:1.14rem; line-height:1.66}
+  .note{background:var(--cream-soft); border-left:4px solid var(--primary)}
+  .tip{background:var(--surface-cream); border-left:4px solid var(--sunshine-700)}
+  .note b,.tip b{color:var(--primary-deep)}
+  .kbd{background:#fff; border:1px solid var(--hairline-strong); border-radius:6px; padding:2px 8px; font-size:.9em; font-family:var(--mono)}
+
+  /* padlet */
+  .padlet-embed{border:1px solid var(--hairline); border-radius:12px; overflow:hidden; background:var(--canvas); box-shadow:0 4px 12px rgba(0,0,0,.04); margin:16px 0}
+  .padlet-embed iframe{width:100%; height:700px; display:block; border:none}
+  .padlet-link{display:inline-block; background:var(--primary); color:#fff; text-decoration:none; font-weight:600; font-size:1.06rem; padding:11px 22px; border-radius:8px}
+  .padlet-link:hover{background:var(--primary-deep)}
+  .abtn{display:inline-block; background:var(--primary); color:#fff; text-decoration:none; font-weight:600; font-size:1.08rem; padding:12px 24px; border-radius:8px; margin:8px 0}
+  .abtn:hover{background:var(--primary-deep)}
+  .abtn.dark{background:var(--ink)} .abtn.dark:hover{background:#000}
+  .abtn.green{background:#5a9e3f} .abtn.green:hover{background:#4a8332}
+  .student-zone{background:#F2F7FD; border:1px solid #CFE0F2; border-radius:18px; padding:10px 24px 28px; margin:8em 0 3em}
+  .student-zone h3{color:#1F5F9E}
+  .student-zone .tip{background:#E8F1FB; border-left-color:#5B93D6}
+  .student-zone .note{background:#E8F1FB; border-left-color:#5B93D6}
+  .student-zone .badge.t{background:#CFE0F2; color:#1F5F9E}
+  .student-zone .badge.s{background:#1F5F9E; color:#fff}
+  .student-zone summary{background:#E4EFFB; color:#1F5F9E}
+  .student-zone .abtn{background:#3E7CC0} .student-zone .abtn:hover{background:#2E6BB0}
+  .student-zone .padlet-link{background:#3E7CC0} .student-zone .padlet-link:hover{background:#2E6BB0}
+  .student-zone .lvl.hi{background:#3E7CC0} .student-zone .lvl.mid{background:#1F5F9E}
+  .student-zone .prompt .label.hi{background:#5B93D6} .student-zone .prompt .label.mid{background:#1F5F9E}
+  .teacher-zone{background:#FDF3E4; border:1px solid #F0D3A6; border-radius:18px; padding:10px 24px 28px; margin:2em 0 3em}
+  .teacher-zone h3{color:#B45309}
+  .teacher-zone summary{background:#FBE6CC; color:#B45309}
+  .teacher-zone .k{background:#F3D0A0; color:#B45309}
+  .teacher-zone .tip{background:#FBEAD1; border-left-color:#E8973A}
+  .teacher-zone .note{background:#FBEAD1; border-left-color:#E8973A}
+  .cred-chip{display:inline-flex; align-items:center; background:#fff; border:1px solid var(--beige-deep); border-radius:999px; padding:8px 16px; font-size:1rem; font-weight:600; color:var(--slate)}
+  .contact-pill{display:inline-flex; align-items:center; gap:7px; background:#fff; border:1px solid var(--beige-deep); border-radius:999px; padding:10px 20px; font-size:1.05rem; font-weight:700; color:var(--primary-deep); text-decoration:none; transition:.16s}
+  .contact-pill:hover{background:var(--primary); color:#fff; border-color:var(--primary); transform:translateY(-1px); box-shadow:0 5px 14px rgba(247,80,15,.24)}
+  .practice{background:#EDF6E6; border:1px solid #C4DEB1; border-radius:14px; padding:6px 22px 20px; margin:16px 0}
+  .prompt .memo-slot{color:#FFC46B; font-weight:700}
+  .memo-btns{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:12px 0}
+  .memo-btn{background:var(--cream); border:1px solid var(--beige-deep); color:var(--ink); border-radius:999px; padding:9px 17px; font-size:1rem; font-weight:600; cursor:pointer; font-family:var(--sans)}
+  .memo-btn:hover{background:var(--cream-deeper)}
+  .memo-cards{display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin:6px 0 14px}
+  @media(max-width:820px){.memo-cards{grid-template-columns:1fr}}
+  .memo-card{text-align:left; background:var(--cream); border:1px solid var(--beige-deep); border-radius:12px; padding:14px 16px; cursor:pointer; font-family:var(--sans); color:var(--ink); display:flex; flex-direction:column}
+  .memo-card:hover{background:var(--cream-deeper); border-color:var(--primary)}
+  .memo-card .t{font-weight:700; color:var(--primary-deep); margin-bottom:6px}
+  .memo-card .memo-text{font-size:.96rem; color:var(--slate); line-height:1.5}
+  .memo-card .ins{margin-top:9px; font-size:.85rem; font-weight:700; color:var(--primary)}
+  .diy-slot{color:#8FB4FF; font-weight:700}
+  .diy-ex{width:100%; background:var(--cream); border:1px solid var(--beige-deep); border-radius:12px; padding:14px 16px; text-align:left; cursor:pointer; font-family:var(--sans); font-size:1rem; color:var(--ink)}
+  .diy-ex:hover{background:var(--cream-deeper); border-color:var(--primary)}
+  .diy-ex .be{color:#1F5F9E; font-weight:700}
+  .diy-ex .ins{display:block; margin-top:9px; font-size:.85rem; font-weight:700; color:var(--primary)}
+  .step-card .kicker{margin-bottom:2px}
+
+  /* ---------- prompt block ---------- */
+  .prompt{
+    position:relative; background:var(--code-bg); color:var(--code-ink);
+    border-radius:10px; padding:46px 20px 18px; margin:12px 0;
+    font-family:var(--mono); font-size:1.2rem; line-height:1.65;
+    white-space:pre-wrap; word-break:break-word;
+  }
+  .prompt .copy{
+    position:absolute; top:10px; right:10px;
+    background:var(--primary); color:#fff; border:none; border-radius:8px;
+    padding:5px 13px; font-size:.82rem; font-weight:600; cursor:pointer;
+    font-family:var(--sans); transition:.15s;
+  }
+  .prompt .copy:hover{background:var(--primary-deep)}
+  .prompt .label{
+    display:block; width:fit-content; font-family:var(--sans); font-size:.94rem; font-weight:700;
+    letter-spacing:.01em; color:#fff; background:rgba(255,255,255,.16);
+    border-radius:999px; padding:4px 15px; margin-bottom:12px;
+  }
+  .prompt .label.hi{background:var(--primary); color:#fff}
+  .prompt .label.mid{background:#fff; color:var(--ink)}
+  .lvl{display:inline-block; font-size:1.08rem; font-weight:700; border-radius:999px; padding:8px 22px; margin:2px 0 6px}
+  .lvl.hi{background:var(--primary); color:#fff}
+  .lvl.mid{background:var(--ink); color:#fff}
+  .ladder{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; align-items:stretch}
+  @media(max-width:960px){.ladder{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.ladder{grid-template-columns:1fr}}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; align-items:start}
+  @media(max-width:760px){.grid3{grid-template-columns:1fr}}
+  .grid5{display:grid; grid-template-columns:repeat(5,1fr); gap:14px; align-items:stretch}
+  @media(max-width:760px){.grid5{grid-template-columns:1fr 1fr}}
+  .grid7{display:grid; grid-template-columns:repeat(7,1fr); gap:8px}
+  .grid7 .card{padding:14px 10px; text-align:center; font-size:.98rem; margin:0}
+  @media(max-width:820px){.grid7{grid-template-columns:repeat(4,1fr)}}
+  @media(max-width:520px){.grid7{grid-template-columns:1fr 1fr}}
+  .tool-card{display:block; text-decoration:none; color:inherit; transition:.15s}
+  .tool-card:hover{border-color:var(--primary); box-shadow:0 6px 18px rgba(247,80,15,.16); transform:translateY(-2px)}
+  .tool-card h4{color:var(--ink)}
+  .vs-row{display:grid; grid-template-columns:1fr auto 1fr; gap:16px; align-items:center; margin:14px 0}
+  .vs-row .vs{font-family:var(--serif); font-weight:700; font-size:1.5rem; color:var(--primary-deep); text-align:center}
+  @media(max-width:720px){.vs-row{grid-template-columns:1fr}.vs-row .vs{padding:4px 0}}
+
+  /* ---------- toggle ---------- */
+  details{border:1px solid var(--hairline); border-radius:12px; margin:14px 0; overflow:hidden; background:var(--canvas)}
+  details[open]{box-shadow:0 4px 14px rgba(0,0,0,.05)}
+  summary{
+    cursor:pointer; padding:17px 22px; font-weight:600; font-size:1.18rem; color:var(--ink);
+    background:var(--surface-cream); list-style:none; display:flex; align-items:center; gap:10px;
+  }
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"＋"; color:var(--primary); font-weight:700; transition:.18s}
+  details[open] summary::before{content:"－"}
+  summary .k{
+    margin-left:auto; font-size:.74rem; font-weight:600; background:var(--cream-deeper);
+    color:var(--primary-deep); padding:3px 11px; border-radius:999px;
+  }
+  .body-in{padding:6px 20px 18px}
+
+  /* ---------- sunset stripe + footer ---------- */
+  .sunset-stripe{
+    height:14px; width:100%;
+    background:linear-gradient(90deg,var(--primary) 0%,var(--sunshine-700) 30%,var(--sunshine-500) 55%,var(--yellow) 78%,var(--cream) 100%);
+  }
+  footer{background:var(--cream); color:var(--slate); padding:40px 0 46px}
+  footer .wrap{display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between}
+  footer .fbrand{display:flex; align-items:center; gap:10px; font-family:var(--serif); font-size:1.15rem; color:var(--ink)}
+  footer .fbrand .m{width:26px; height:26px; border-radius:7px; background:linear-gradient(135deg,var(--sunshine-700),var(--primary))}
+  footer small{font-size:.92rem; color:var(--steel)}
+
+  @media(max-width:640px){
+    body{font-size:17px}
+    .topbar .inner{gap:12px}
+    .brand .wm{display:none}
+    .hero .wrap{padding:56px 24px 52px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== FIXED TOP BAR ===== -->
+<header class="topbar">
+  <div class="inner">
+    <div class="brand"><span class="m"></span><span class="wm">VIBE CODING</span></div>
+    <nav class="tabs">
+      <button class="tab active" data-target="p-overview">홈</button>
+      <button class="tab" data-target="p-intro">환경세팅</button>
+      <button class="tab" data-target="p-s1">1차시 · AI이론</button>
+      <button class="tab" data-target="p-s1b">1차시 · 프롬프트</button>
+      <button class="tab" data-target="p-s2">2차시 · 바이브코딩</button>
+      <button class="tab" data-target="p-gift">🎁 선물</button>
+    </nav>
+  </div>
+</header>
+
+<nav id="sidebar">
+  <div class="toc-title">📑 목차</div>
+  <div id="tocList"></div>
+</nav>
+
+<main>
+
+<!-- ===== TAB 1 · 개요 ===== -->
+<div class="panel active" id="p-overview">
+  <div class="hero" style="position:relative">
+    <a href="https://joo.is/진로교원연수" target="_blank" rel="noopener" style="position:absolute; top:2.4em; right:2.4em; background:#fff; color:#F7500F; font-weight:800; font-size:3rem; padding:20px 40px; border-radius:999px; text-decoration:none; box-shadow:0 6px 18px rgba(0,0,0,.16)">🔗 joo.is/진로교원연수</a>
+    <div class="wrap">
+      <div class="eyebrow">인천 진로교사를 위한 바이브코딩 연수</div>
+      <h1>생성형 AI가 주도하는<br>미래교실</h1>
+      <p class="sub">AI의 원리를 이해하고, 코딩 지식 없이 자연어만으로 진로 상담·수업에 바로 쓰는 나만의 도구를 직접 만듭니다.</p>
+      <div class="meta">
+        <span class="chip">중등(중·고) 진로교사</span>
+        <span class="chip">총 3차시</span>
+        <span class="chip">이해 → 시연 → 직접 제작</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section class="block">
+      <div class="card card-cream" style="position:relative; overflow:hidden; margin-bottom:10px; padding-left:38px; border:1px solid #EBB86A; background:linear-gradient(135deg,#FDF1D6 0%,#F6D488 45%,#F0A94E 100%); box-shadow:0 12px 34px rgba(214,132,40,.24)">
+        <div style="position:absolute; left:0; top:0; bottom:0; width:7px; background:linear-gradient(180deg,#F7B23C 0%,#E07B18 100%)"></div>
+        <div style="position:absolute; top:-40%; right:-6%; width:52%; height:180%; background:linear-gradient(115deg, rgba(255,255,255,0) 42%, rgba(255,255,255,.6) 50%, rgba(255,255,255,0) 58%); transform:rotate(8deg); pointer-events:none"></div>
+        <div style="position:relative">
+        <div style="font-size:.82rem; font-weight:800; letter-spacing:.16em; color:#B5540D; margin-bottom:8px">INSTRUCTOR · 강사</div>
+        <div style="font-family:var(--serif); font-weight:700; font-size:2.4rem; line-height:1.12; color:#3A2408">이애진 <span style="font-size:1.4rem; font-weight:600; color:#C25510">Lee Ae-jin</span></div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:16px">
+          <span class="cred-chip" style="border-color:#EBB86A">구글 공식 PD 파트너사 · FlowDX 대표</span>
+          <span class="cred-chip" style="border-color:#EBB86A">구글 공식 트레이너 (Google Certified Trainer)</span>
+          <span class="cred-chip" style="border-color:#EBB86A">🎓 서울대학교 정보문화학(ICT)</span>
+        </div>
+        <div style="height:1px; background:#EAA95A; opacity:.85; margin:20px 0 18px"></div>
+        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px">
+          <a href="https://flowdx.kr" target="_blank" rel="noopener" class="contact-pill">🌐 flowdx.kr</a>
+          <a href="mailto:ai@flowdx.kr" class="contact-pill">✉ ai@flowdx.kr</a>
+          <a href="tel:01023198419" class="contact-pill">☎ 010-2319-8419</a>
+          <a href="https://capable-tarsier-97affe.netlify.app/" target="_blank" rel="noopener" class="abtn" style="margin:0; padding:10px 22px; font-size:1.05rem">🔗 프로필 보기</a>
+        </div>
+        </div>
+      </div>
+      <details>
+        <summary style="background:#fff">강사 상세 이력 보기 <span class="k">학력 · 경력 · 저서</span></summary>
+        <div class="body-in">
+      <div class="cols3">
+        <div class="col">
+          <div class="card">
+            <h4>학력 및 전문 자격</h4>
+            <ul class="clean">
+              <li>서울대학교 정보문화학</li>
+              <li>Google Certified Trainer (구글 공식 트레이너)</li>
+              <li>Gemini Certified Educator (제미나이 에듀케이터)</li>
+              <li>ADsP (데이터 분석 준전문가)</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>주요 언론 보도 및 공식 성과</h4>
+            <ul class="clean">
+              <li>중앙뉴스타임스(2025.11) · 인천시교육청 교육연수원 직무연수</li>
+              <li>인천광역시교육청(2025.12) · 초·중등 교실수업혁명 직무연수 운영</li>
+              <li>미디어투데이(2025.07) · 파주교육지원청 AI 소통 역량 강화 및 실무 적용</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card">
+            <h4>교육·행정 혁신 주요 경력</h4>
+            <ul class="clean">
+              <li><b>구글 코리아</b> 제미나이 아카데미 주강사</li>
+              <li><b>리더십 연수</b> 전국 학교장·교감 대상 AI 리터러시 연수 200회 이상 진행</li>
+              <li><b>대학 맞춤 연수</b> 교직원·교수·학생 대상 AI 행정 혁신 연수</li>
+              <li><b>정책연구 연수</b> 경기도교육연구원 박사급 연구원 대상 정책 연구 AI 활용 연수</li>
+              <li><b>공무원 연수</b> 5~9급 교육행정직 공무원 AI 정책보고서 연수</li>
+              <li><b>공공 혁신</b> 한국과학창의재단 '찾아가는 학교컨설팅' 코디네이터 및 주강사</li>
+              <li><b>특수목적 교육</b> 대원외고 등 특목고 AI 연수 및 영재교육연구소 강사 양성 연수</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card">
+            <h4>산업 현장 실무 경력 (IT &amp; Global Industry)</h4>
+            <ul class="clean">
+              <li><b>FlowDX 대표</b> AI 비즈니스 모델링 및 공공기관 DX 전환 컨설팅 총괄</li>
+              <li><b>글로벌 플랫폼 기획</b> Ebay·G마켓·옥션 해외 플랫폼 개발 프로젝트 기획 참여</li>
+              <li><b>IT/게임 산업 실무</b> Nexon·Ebay 등 글로벌 기업 주요 프로젝트 기획 및 개발</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>주요 저서 (Publications)</h4>
+            <ul class="clean">
+              <li>『HTML, CSS, JavaScript를 배우는 마법코딩학교』</li>
+              <li>『AI시대, 보고서가 당신의 무기가 된다』</li>
+              <li>『AI 기반 문화콘텐츠 기획』</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="block" style="margin-top:8em">
+      <div class="kicker">Padlet</div>
+      <h2>함께 나눌 공간 · 패들렛</h2>
+      <p class="lead">활동 결과물과 의견을 이 패들렛에 자유롭게 남겨 주세요.</p>
+      <p><a class="padlet-link" href="https://padlet.com/doramge1984/padlet-dkx3ofntjwv55mn8" target="_blank" rel="noopener">↗ 패들렛 새 창으로 열기</a></p>
+      <div class="padlet-embed">
+        <iframe src="https://padlet.com/doramge1984/padlet-dkx3ofntjwv55mn8" allow="camera;microphone;geolocation" title="연수 패들렛"></iframe>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ===== TAB 2 · 도입 ===== -->
+<div class="panel" id="p-intro">
+  <div class="wrap">
+    <section class="block">
+      <div class="kicker">환경세팅</div>
+      <h2>시작 전 환경 세팅</h2>
+      <p class="lead">연수를 매끄럽게 진행하려면 크롬 브라우저와 구글 개인계정이 필요합니다. 아래 4단계를 미리 준비해 주세요.</p>
+
+      <div class="card step-card">
+        <div class="kicker">STEP 1</div>
+        <h3 style="margin-top:2px">크롬 브라우저가 없다면? 크롬 설치!</h3>
+        <p><a class="abtn" href="https://www.google.com/chrome/" target="_blank" rel="noopener">⬇️ 크롬 설치하기</a></p>
+        <details>
+          <summary>크롬 설치 방법 <span class="k">자세히 보기</span></summary>
+          <div class="body-in">
+            <p>브라우저는 인터넷을 여는 창입니다. 대표적으로 크롬(Chrome)과 엣지(Edge)가 있어요. 이 연수에서는 구글 AI인 제미나이와 가장 잘 맞는 크롬을 사용합니다. 이 과정은 크롬(Chrome) 기준으로 진행합니다.</p>
+            <ul class="clean">
+              <li>위 '크롬 설치하기' 버튼을 누릅니다</li>
+              <li>Chrome 다운로드 → 설치 파일 실행</li>
+              <li>설치가 끝나면 크롬을 기본 브라우저로 설정</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="card step-card">
+        <div class="kicker">STEP 2</div>
+        <h3 style="margin-top:2px">구글 개인계정이 생각이 안 난다면? 구글계정 비밀번호 찾기</h3>
+        <p>이미 구글 계정이 있는 분은 새로 만들 필요가 없습니다. 연수 전, 구글 개인계정과 비밀번호를 꼭 준비해 주세요. "내 계정이 있었나? 비밀번호가 뭐였지?" 싶다면 아래 방법으로 찾으면 됩니다.</p>
+        <details>
+          <summary>계정·비밀번호 찾는 방법 <span class="k">자세히 보기</span></summary>
+          <div class="body-in">
+            <div class="padlet-embed"><iframe src="https://docs.google.com/document/d/15QHT-cQos4FD31cncyhzexmc9Ofkiwuy4MsUeqsOtH0/preview" title="계정·비밀번호 찾는 방법" style="height:620px"></iframe></div>
+            <p style="color:var(--steel); font-size:1rem; margin-top:6px">※ 문서가 보이지 않으면 <a href="https://docs.google.com/document/d/15QHT-cQos4FD31cncyhzexmc9Ofkiwuy4MsUeqsOtH0/edit?tab=t.0" target="_blank" rel="noopener" style="color:var(--primary-deep)">여기</a>를 눌러 새 창으로 열어 주세요.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="card step-card">
+        <div class="kicker">STEP 3</div>
+        <h3 style="margin-top:2px">구글계정이 없다면? 구글계정 만들기</h3>
+        <p><a class="abtn" href="https://accounts.google.com/signup" target="_blank" rel="noopener">✏️ 구글 가입하기</a></p>
+        <details>
+          <summary>가입 방법 <span class="k">자세히 보기</span></summary>
+          <div class="body-in">
+            <p>구글 계정이 아예 없다면 새로 만듭니다. 학교·기관 계정이 아닌 <b>개인 계정</b>으로 만드는 것이 중요해요.</p>
+            <ul class="clean">
+              <li>위 '구글 가입하기' 버튼 클릭</li>
+              <li>이름 → 생년월일·성별 → 원하는 아이디(이메일) 입력</li>
+              <li>비밀번호 설정 후 휴대폰 본인인증 → 가입 완료</li>
+              <li>만든 아이디와 비밀번호를 꼭 메모해 둡니다</li>
+            </ul>
+            <div class="note">⚠️ 가입 시 입력한 아이디(이메일)와 비밀번호는 앞으로 AI 로그인에 계속 쓰입니다. 잊지 않도록 적어 두세요.</div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card step-card" style="background:linear-gradient(135deg,#FFF3E2 0%,#FFE1BE 100%); border-color:#F3C48A; box-shadow:0 0 44px rgba(247,120,30,.32)">
+        <div class="kicker">STEP 4</div>
+        <h3 style="margin-top:2px">오늘만 사용하실 임시 구글계정 공유</h3>
+        <p>구글 계정 준비가 어려우시면, 아래 시트에서 오늘만 사용하는 임시 계정을 받아 쓰세요.</p>
+        <p><a class="abtn dark" href="https://docs.google.com/spreadsheets/d/16Ejg7lC9iv8r4w_Ljrz6BFD9gmMAhJOgXHiwb7i1PH0/edit?usp=sharing" target="_blank" rel="noopener">📄 임시 구글계정 시트 열기</a> &nbsp;👈 여기를 클릭해주세요!</p>
+        <div class="padlet-embed"><iframe src="https://docs.google.com/spreadsheets/d/16Ejg7lC9iv8r4w_Ljrz6BFD9gmMAhJOgXHiwb7i1PH0/edit?usp=sharing&amp;rm=minimal&amp;widget=true&amp;headers=false&amp;gid=0" title="임시 구글계정 시트" style="height:520px"></iframe></div>
+        <p style="color:var(--steel); font-size:1rem">※ 화면에서 바로 보이지 않으면 위 '시트 열기' 버튼으로 열어 주세요. (이름 작성은 시트를 직접 열어야 가능합니다.)</p>
+        <ul class="clean">
+          <li>시트의 C열에 본인 이름(또는 닉네임)을 적습니다.</li>
+          <li>그 줄의 아이디·비밀번호로 로그인해 사용합니다.</li>
+        </ul>
+        <div class="note">⚠️ 이 계정은 기관 계정이라, AI 활용 시 개인계정과 달리 일부 기능이 막힐 수 있습니다. 가능하면 개인 구글계정 사용을 권장합니다.</div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ===== TAB 3 · 1차시 ===== -->
+<div class="panel" id="p-s1">
+  <div class="wrap">
+    <section class="block">
+      <div class="kicker">Session 1 · AI 이론</div>
+      <h2>AI 이론 — AI를 제대로 알기</h2>
+      <p class="lead">우리가 매일 쓰는 AI, 제대로 알고 있나요?</p>
+
+      <div class="section-box">
+        <h3>AI 진화의 사다리 — 지금 우리는 어느 단계?</h3>
+        <div class="ladder">
+          <div class="card"><span class="badge s">📍 현재 위치</span><h4 style="margin-top:8px">반응형 AI · 챗봇</h4><p style="margin:0">시키면 그때그때 한 번 답하는 단계.</p></div>
+          <div class="card"><span class="badge s">🔄 현재진행형</span><h4 style="margin-top:8px">에이전틱 AI</h4><p style="margin:0">목표를 주면 스스로 계획하고 실행하는 유능한 비서.</p></div>
+          <div class="card"><span class="badge t">먼 미래</span><h4 style="margin-top:8px">AGI</h4><p style="margin:0">처음 보는 문제도 인간 수준으로 해결하는 만능 동료.</p></div>
+          <div class="card"><span class="badge t">먼 미래</span><h4 style="margin-top:8px">ASI</h4><p style="margin:0">모든 분야에서 인간 최고를 능가하는 단계.</p></div>
+        </div>
+        <div class="note">⚠️ 언론에서 말하는 <b>AGI·ASI는 아직 오지 않은 미래</b>입니다. 과장된 환상과 실제 도구를 명확히 구분해야 합니다.</div>
+      </div>
+
+      <div class="section-box">
+        <div class="kicker" style="margin-top:12px">생각해보기</div>
+        <h3 style="margin-top:.2em">💡 AI 시대, 인간에게 가장 중요한 능력은?</h3>
+        <div class="grid">
+          <div class="card">
+            <p style="margin:0 0 6px"><b>❓ AI가 잘하는 것</b> — 코딩? 분석? 창작?</p>
+            <p style="margin:0 0 8px">그렇다면 <b>인간은 무엇을 잘해야 할까요?</b></p>
+            <p style="font-size:1.5rem; letter-spacing:.35em; color:var(--primary-deep); font-weight:700; margin:10px 0 4px">ㅎ ㄹ ㅅ ㄴ ㅇ ㅅ</p>
+            <p style="color:var(--steel); margin:0">👆 초성 힌트 — 무엇을 뜻할까요? (바로 다음 주제로 이어집니다)</p>
+          </div>
+          <div class="card">
+            <p style="margin:0 0 8px"><b>🎯 AI에게 없는 것</b><br>AI는 데이터 안에서 패턴을 찾을 뿐, 진짜 경험·감정·도덕적 판단은 인간만이 가집니다.</p>
+            <p style="margin:0"><b>인간이 더 잘하는 것</b><br>맥락 이해 · 창의적 질문 · 비판적 사고 · 공감 · 협력 · 자신만의 이야기</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>AI의 한계 — 할루시네이션: 자신감 넘치는 거짓말</h3>
+      <p>AI는 "모른다"고 말하는 대신 그럴듯한 내용을 만들어냅니다. 이것이 <b>할루시네이션(환각)</b>입니다.</p>
+      <div class="grid">
+        <div class="card" style="border-color:#E8B4A0">
+          <span class="badge s">❌ 할루시네이션</span>
+          <p style="margin:10px 0 4px"><b>Q.</b> "2026년 서울 마라톤 우승자는 누구야?"</p>
+          <p style="margin:4px 0"><b>AI.</b> "2026년 서울 마라톤 우승자는 김민준으로, 2시간 3분 42초의 기록을 세웠습니다."</p>
+          <p style="color:var(--steel); margin:4px 0 0">→ 실제로 존재하지 않는 사람과 기록을 만들어낸 것.</p>
+        </div>
+        <div class="card" style="background:var(--surface-cream)">
+          <span class="badge t">✓ 올바른 응답</span>
+          <p style="margin:10px 0 4px"><b>Q.</b> "2026년 서울 마라톤 우승자는 누구야?"</p>
+          <p style="margin:4px 0"><b>AI.</b> "<b>현재 데이터로는 확인할 수 없습니다.</b> 공식 웹사이트나 뉴스를 통해 확인하시기 바랍니다."</p>
+          <p style="color:var(--steel); margin:4px 0 0">→ 모르면 모른다고 말하는 것이 신뢰할 수 있는 AI.</p>
+        </div>
+      </div>
+      <div class="tip">💡 <b>왜 이런 일이?</b> AI는 확률적으로 다음 단어를 예측합니다. "그럴듯한" 문장을 생성하도록 훈련되었기에, 정보가 없어도 그럴듯한 내용을 만들어낼 수 있습니다.</div>
+
+      <h3>할루시네이션, 직접 유발해보기 — 최신 AI도 잘 걸립니다</h3>
+      <p>아래 프롬프트를 제미나이·ChatGPT에 직접 넣어, AI가 얼마나 자신 있게 틀리는지 확인해보세요.</p>
+      <details>
+        <summary>할루시네이션 유발 프롬프트 6가지 <span class="k">펼쳐보기</span></summary>
+        <div class="body-in">
+      <div class="grid3">
+        <div class="card"><b>① 법령 조항 번호</b>
+          <div class="prompt"><button class="copy">복사</button>청소년 온라인 활동 관련 법령 조항 번호를 정확히 알려줘</div>
+          <p style="color:var(--steel); margin:0">→ 없는 조항 번호를 자신 있게 지어냄</p>
+        </div>
+        <div class="card"><b>② 아이돌 트랙 정보</b>
+          <div class="prompt"><button class="copy">복사</button>내 최애 아이돌 ○○○의 3번 트랙 제목과 수록 앨범 알려줘</div>
+          <p style="color:var(--steel); margin:0">→ 구체적 트랙 번호·앨범을 그럴듯하게 오류 생성</p>
+        </div>
+        <div class="card"><b>③ 미출시 콘텐츠</b>
+          <div class="prompt"><button class="copy">복사</button>오징어게임 시즌 3 줄거리 알려줘</div>
+          <p style="color:var(--steel); margin:0">→ 없는 내용을 자신 있게 만들어냄</p>
+        </div>
+      </div>
+      <p style="margin-top:22px"><b>진로교사 업무에서 특히 조심할 예</b> — 매년 바뀌거나 통계·근거가 필요한 정보는 AI가 자신 있게 틀립니다.</p>
+      <div class="grid3">
+        <div class="card"><b>④ 대입 전형 세부</b>
+          <div class="prompt"><button class="copy">복사</button>○○대학교 2026학년도 수시 학생부종합전형의 수능 최저학력기준을 정확히 알려줘</div>
+          <p style="color:var(--steel); margin:0">→ 지난 연도 기준이나 없는 기준을 지어냄 (반드시 모집요강 확인)</p>
+        </div>
+        <div class="card"><b>⑤ 학과 취업·통계</b>
+          <div class="prompt"><button class="copy">복사</button>○○대학교 ○○학과의 2025년 취업률과 졸업생 평균 연봉을 정확히 알려줘</div>
+          <p style="color:var(--steel); margin:0">→ 출처 없는 수치를 그럴듯하게 생성</p>
+        </div>
+        <div class="card"><b>⑥ 제도·규정 조항</b>
+          <div class="prompt"><button class="copy">복사</button>고교학점제 졸업 이수학점 관련 규정의 조항 번호를 정확히 알려줘</div>
+          <p style="color:var(--steel); margin:0">→ 없는 조항·수치를 자신 있게 제시</p>
+        </div>
+      </div>
+        </div>
+      </details>
+      <div class="tip">🧪 직접 해보며 "AI가 자신 있게 틀리는" 순간을 확인하고, <b>대입·통계·법령은 반드시 공식 자료로 검증</b>하는 습관을 강조하세요.</div>
+      <p style="margin-top:14px"><b>할루시네이션 제어 추천 플랫폼</b> — 내가 넣은 자료 안에서만 출처 기반으로 답하는 도구.</p>
+      <p><a class="abtn" href="https://notebooklm.google.com/" target="_blank" rel="noopener">🔗 노트북LM(NotebookLM) 열기</a></p>
+
+
+      <div class="section-box" style="background:#FCEDEA; border-color:#EAB7A9">
+      <h3 class="toc-red">할루시네이션 제어법 — 제미나이 전체 대화에 '지침' 설정하기</h3>
+      <p>AI에게 "어떻게 답해야 하는지" 사전에 규칙을 알려주면 할루시네이션을 크게 줄일 수 있습니다.</p>
+      <div class="card">
+        <ul class="clean">
+          <li><b>① 정확성 우선</b> · 확실한 근거가 없으면 "현재 데이터로는 확인할 수 없습니다"라고 정직하게 답변할 것. 추측 금지.</li>
+          <li><b>② 검증 절차(Chain of Thought)</b> · 답변 전 사실 관계를 먼저 나열하고 논리적 흐름에 따라 단계별로 설명할 것.</li>
+          <li><b>③ 링크 첨부</b> · 언급한 수치·법령·학술 자료는 가급적 확인 가능한 공식 URL을 함께 제시할 것.</li>
+          <li><b>④ 검색 도구 활용</b> · 근거가 부족하면 추측하지 말고 검색 도구(Google Search)로 확인할 것.</li>
+        </ul>
+        <div class="prompt"><button class="copy">복사</button><span class="label">📋 제미나이 지침 붙여넣기용</span>나를 [이름]이라고 불러줘.
+1. 정확성 우선: 확실한 근거가 없으면 "현재 데이터로는 확인할 수 없습니다"라고 정직하게 답변하고, 추측은 하지 마.
+2. 검증 절차(Chain of Thought): 답변하기 전에 사실 관계를 먼저 나열하고, 그 논리적 흐름에 따라 단계별로 설명해.
+3. 링크 첨부: 언급한 수치·법령·학술 자료는 가급적 확인할 수 있는 공식 URL을 함께 제시해.
+4. 검색 도구 활용: 근거가 되는 문서나 데이터가 부족하면 추측하지 말고 검색 도구(Google Search)를 활용해 확인해.</div>
+      </div>
+      <div class="note">💡 <b>설정 방법</b> · 위 텍스트를 복사 → 제미나이 → 설정 → 지침 → 붙여넣기. 이후 모든 대화에 자동 적용됩니다. [ ] 안에 본인 이름을 넣어보세요!</div>
+      <p style="margin-top:16px"><b>추가 지침 · 진로·진학 정보 검증 강제</b> — 대입·통계·법령을 다룰 때 덧붙이면 좋아요.</p>
+      <div class="prompt"><button class="copy">복사</button><span class="label">추가 지침</span>앞으로 진로·진학 정보를 답할 땐, 반드시 커리어넷·대학 공식 모집요강 등 확인 가능한 출처 링크를 함께 제시하고, 근거가 없으면 지어내지 말고 "공식 자료 확인 필요"라고만 답해.</div>
+      </div>
+
+      <div class="section-box">
+      <h3>할루시네이션 제어법 2 — 지침으로도 못 믿는다면? RAG</h3>
+      <p>AI의 학습 데이터에는 한계가 있습니다. 최신 정보나 특정 문서의 내용은 직접 제공해야 합니다.</p>
+      <div class="grid3">
+        <div class="card"><b>R · Retrieval (검색·인출)</b><br><span style="color:var(--steel)">방대한 데이터 속에서 질문과 관련된 정보를 찾아냅니다.</span></div>
+        <div class="card"><b>A · Augmented (증강·보강)</b><br><span style="color:var(--steel)">찾아낸 정보를 AI의 지식에 덧붙여 보강합니다.</span></div>
+        <div class="card"><b>G · Generation (생성)</b><br><span style="color:var(--steel)">보강된 근거를 바탕으로 정확한 답변을 만듭니다.</span></div>
+      </div>
+      <div class="tip"><b>핵심</b> · 검색으로 보강하여 답변을 만든다.</div>
+      <div style="height:5em"></div>
+      <h4 style="margin-top:3em">제미나이에서 RAG를 활용하는 3가지 방법</h4>
+      <div class="grid3">
+        <div class="card"><b>📁 로컬 데이터 · File Upload</b><br><span style="color:var(--steel)">PDF·엑셀 파일을 직접 업로드하여 분석.</span></div>
+        <div class="card"><b>☁️ 개인 저장소 · @Google Drive</b><br><span style="color:var(--steel)">내 드라이브 속 문서를 연동하여 검색.</span></div>
+        <div class="card"><b>🌐 실시간 웹 · Web Search</b><br><span style="color:var(--steel)">구글 검색으로 최신 웹 페이지 정보를 인출.</span></div>
+      </div>
+      <div class="prompt"><button class="copy">복사</button><span class="label">RAG 예시 · 진로</span>[첨부한 우리 학교 진로 프로그램 안내 PDF]와 [커리어넷 최신 자료]를 바탕으로, 우리 학생들에게 추천할 진로 체험활동 3가지를 근거와 함께 정리해줘.</div>
+      <div class="practice">
+      <p style="margin-top:14px"><b>🧑‍🏫 실습 · 초기 상담 전략 설계 (RAG + ToT + 검증형)</b> — 검사 데이터를 넣으면 학생 한 명의 분석·가설·상담 질문·대본·진로정보까지 한 번에.</p>
+      <p style="color:var(--steel); font-size:1rem">💡 아래 시트를 사본으로 받아 제미나이에 업로드하면 바로 실습할 수 있어요.</p>
+      <p><a class="abtn" href="https://docs.google.com/spreadsheets/d/1D1Thqb6MjmuDoGcd49GqnXup5WdYBJ8yZdDstddwe8E/copy" target="_blank" rel="noopener">📄 홀랜드(RIASEC) 흥미검사 결과 시트 — 내 사본 만들기</a></p>
+      <div class="prompt"><button class="copy">복사</button><span class="label">RAG 실전 · 상담 전략 설계</span>너는 10년 이상 경력의 베테랑 중·고등학교 진로상담 교사이자, 최신 진학·취업 정보를 정확한 출처로 확인하는 리서처야. 첨부한 진로흥미검사 데이터를 바탕으로 아래 순서로 도와줘.
+
+먼저, 나에게 "어떤 학생을 볼까요?"라고 물어봐줘. 내가 학생 한 명을 고르면 그때부터 아래 단계를 진행해.
+
+[1단계] 데이터 분석 — 그 학생의 RIASEC 점수 분포·대표유형과 '희망 진로분야'의 일치/불일치를 분석할 것. (데이터에 있는 사실만 사용하고 지어내지 마)
+
+[2단계] 가설 설정(Tree of Thoughts) — 이 학생에게 별도 상담이 필요한 이유를 흥미–희망 불일치, 특정 흥미의 편중·결핍 등으로 나눠 서로 다른 가설 3가지를 세울 것.
+
+[3단계] 상담 질문 도출 — 가설을 검증하고 학생의 마음을 열 부드러운 개방형 질문 3가지.
+
+[4단계] 아이스브레이킹 참고 대본 — 상담 첫 3분에 쓸 공감적 대화 예시(선생님이 각색해 사용).
+
+[5단계] 진로정보(검증형) — 이 학생의 희망 분야(또는 분석으로 추천한 분야)에 대해, 커리어넷·대학 공식 모집요강 등 확인 가능한 최신 자료를 근거로 최근 진학·취업 동향과 준비 사항을 출처 링크와 함께 정리할 것. 확인되지 않는 내용은 '공식 자료 확인 필요'라고만 표시하고 절대 지어내지 마.
+
+각 단계는 제목을 달아 구분해서 보여줘.</div>
+      <p><a class="abtn green" href="https://share.gemini.google/jEf0pnunhq2Z" target="_blank" rel="noopener">🔗 위 프롬프트를 넣었을 때의 답변 예시 보기</a></p>
+      </div>
+      <div class="tip">💡 제미나이는 언제까지의 데이터를 학습했을까요? 그 이후의 사건은 RAG(파일·드라이브·웹)로 보완할 수 있습니다.</div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ===== TAB 3b · 1차시 프롬프트 ===== -->
+<div class="panel" id="p-s1b">
+  <div class="wrap">
+    <section class="block">
+      <div class="kicker">Session 1 · 프롬프트</div>
+      <h2>프롬프트 설계 — AI에게 제대로 시키기</h2>
+      <p class="lead">뾰족한 프롬프트 구조(PCGF)부터 고급 기법(CoT·리버스·메타·ToT)까지.</p>
+
+      <h3>프롬프트 엔지니어링 — 뾰족하고 명확한 질문이 AI를 움직인다</h3>
+      <p>프롬프트(Prompt)는 AI에게 주는 질문·지시문입니다. 글뿐 아니라 사진·목소리로도 지시할 수 있어요.</p>
+      <div class="grid">
+        <div class="card"><span class="badge s">😵 두루뭉술하면</span><p style="margin:8px 0 0">→ AI는 상상력(할루시네이션)을 발휘합니다.</p></div>
+        <div class="card"><span class="badge t">🎯 구체적·뾰족하면</span><p style="margin:8px 0 0">→ AI는 더 정확하고 원하는 답을 줍니다.</p></div>
+      </div>
+
+      <h3>AI의 본질 — AI는 '생각의 거울'입니다</h3>
+      <p style="font-size:1.28rem; font-family:var(--serif); color:var(--primary-deep)">"AI가 답을 못하는 걸까요? 아니면 우리가 질문을 못하는 걸까요?"</p>
+      <div class="grid">
+        <div class="card"><span class="badge s">🔍 과거 · 구글링</span><p style="margin:8px 0 0">단어 위주로 검색하고 결과를 수동으로 받습니다. AI는 정답을 꺼내는 창고가 아닙니다.</p></div>
+        <div class="card"><span class="badge t">🪞 2026 · 프롬프팅</span><p style="margin:8px 0 0">AI는 내 생각을 비추는 '거울'. 맥락과 구조를 설계하면 새로운 결과물이 나옵니다.</p></div>
+      </div>
+      <div class="tip">💡 <b>핵심</b> · 내 질문이 뚜렷하면 답도 뚜렷하고, 흐릿하면 답도 흐릿합니다. 우리가 바꿀 수 있는 건 AI가 아니라 '우리의 질문'입니다.</div>
+
+      <h3>기본 구조 — PCGF 구조화 기법 (완벽한 지시의 해부도)</h3>
+      <p>좋은 프롬프트에는 4가지 요소가 있습니다. 이 구조를 갖추면 AI가 임의로 짐작하지 않아요.</p>
+      <div class="ladder">
+        <div class="card"><b>P · Persona</b><br><span style="color:var(--steel)">답변의 톤과 전문성 고정</span></div>
+        <div class="card"><b>C · Context</b><br><span style="color:var(--steel)">작업의 배경 지식 제공</span></div>
+        <div class="card"><b>G · Goal</b><br><span style="color:var(--steel)">핵심 목표</span></div>
+        <div class="card"><b>F · Format</b><br><span style="color:var(--steel)">출력 형태 완벽 통제</span></div>
+      </div>
+      <div class="prompt" style="margin-bottom:2.5em"><button class="copy">복사</button><span class="label">PCGF 템플릿</span>너는 [페르소나]야. 나는 [내 상황]이고, [목표]를 만들어줘. [출력 형식]으로 작성해줘.</div>
+      <div style="height:5em"></div>
+      <div class="grid">
+        <div class="card" style="border-color:#E8B4A0">
+          <span class="badge s">Before · 나쁜 예</span>
+          <div class="prompt" style="margin-top:8px"><button class="copy">복사</button><span class="label">아마추어의 방식</span>자유학기제 진로 체험 프로그램 기획안 좀 써줘.</div>
+          <p style="margin:8px 0 0"><b>진단</b> · 역할 부재 · 맥락 없음 · 출력 형식 모호<br><span style="color:var(--steel)">→ AI가 임의의 확률로 결과를 짐작하게 방치함.</span></p>
+        </div>
+        <div class="card" style="background:var(--surface-cream)">
+          <span class="badge t">After · 좋은 예 (PCGF)</span>
+          <div class="prompt" style="margin-top:8px"><button class="copy">복사</button><span class="label">PCGF 적용 · 중등</span>[P] 역할: 너는 중학교 <span style="color:#FF8F8F; font-weight:700">10년 차 베테랑 진로전담교사</span>야.
+[C] 맥락: 1학년 자유학기제를 맞이하여, 지역사회 연계 진로 체험 프로그램 예산 및 일정을 학교장에게 보고하려고 해.
+[G] 목표: '<span style="color:#FF8F8F; font-weight:700">학생 주도형 지역사회 직업 체험(Job Shadowing) 프로그램' 운영 기획안을 작성</span>해 줘.
+[F] 형식: 각 프로그램 단계별 기대효과 끝에 <span style="color:#FF8F8F; font-weight:700">관련 근거(2022 개정 교육과정 중학교 진로와 직업 편제 기준 또는 진로교육법)</span>를 한 줄 추가하고, 추측성 표현은 금지해. 구체적인 예산액이나 체험처 이름 등 <span style="color:#FF8F8F; font-weight:700">모르는 내용은 내가 채울 수 있게 빈칸(____)으로 남겨둬</span>.</div>
+          <p><a class="abtn green" href="https://share.gemini.google/GkHLkVmbWbVn" target="_blank" rel="noopener">🔗 위 프롬프트의 답변 예시 보기</a></p>
+          <p style="color:var(--steel); font-size:1rem; margin-top:6px">⋮ 삼점 → 독스로 내보내기</p>
+        </div>
+      </div>
+      <div style="height:5em"></div>
+      <p style="margin-top:2.2em"><b>PCGF 실전 · 진로활동 특기사항 초안(담임 제공용) / 진로와 직업 세특</b> — 관찰 메모만 넣으면 학생부 기준 초안이 나옵니다.</p>
+      <div class="prompt"><button class="copy">복사</button><span class="label">PCGF 실전 · 진로활동 특기사항</span>[P] 너는 학교생활기록부 기재요령을 정확히 아는 15년차 진로전담교사야.
+[C] 아래는 한 학생의 진로상담·활동 관찰 기록이야: <span id="memoSlot" class="memo-slot">[관찰 메모 붙여넣기]</span>
+[G] 이 내용을 담임교사가 '진로활동 특기사항'에 반영할 수 있도록 담임 제공용 초안을 작성해줘. (내가 '진로와 직업' 교과를 맡았다면 해당 과목 세특 초안으로 써도 됨.)
+[F] 조건: ① 관찰된 사실에 근거해 '동기 → 활동 → 배움·변화 → 후속 연계' 흐름으로 서술 ② 추측·과장·평가어(예: 우수함) 금지, 최종 기재는 담임이 하므로 담임이 다듬기 쉽게 구체적 관찰 사실 중심 ③ 학생 이름·특정 수치는 [ ]로 비워두기 ④ 우리 학교 글자 수 기준은 [ ]자 — 그 안으로 ⑤ 서로 다른 3가지 버전으로 제시.</div>
+      <p style="font-size:.98rem; color:var(--steel); margin:12px 0 6px">👇 예시 메모 — 누르면 위 프롬프트의 [관찰 메모] 자리에 들어갑니다.</p>
+      <div class="memo-cards">
+        <button class="memo-btn memo-card" data-target="memoSlot"><span class="t">📝 진로독서·탐구</span><span class="memo-text">진로 독서 활동에서 희망 직업인 '간호사'와 관련해 스스로 도서 3권을 찾아 읽고 감염관리 간호사라는 세부 직무를 새로 알게 됨. 조사 내용을 카드뉴스로 정리해 학급에 발표했고, 발표 후 친구들의 질문에 자료를 근거로 답함. 이후 보건 동아리 가입을 희망함.</span><span class="ins">＋ 이 예시 넣기</span></button>
+        <button class="memo-btn memo-card" data-target="memoSlot"><span class="t">📝 진로체험</span><span class="memo-text">지역 직업체험의 날에 자동차 정비소를 방문해 정비사 직무를 관찰하고 인터뷰 질문 5개를 준비해 진행함. 처음에는 기계공학에만 관심을 보였으나 체험 후 '사람의 안전을 지키는 일'로 관심이 확장되어 진로희망을 자동차 안전 분야로 구체화함.</span><span class="ins">＋ 이 예시 넣기</span></button>
+        <button class="memo-btn memo-card" data-target="memoSlot"><span class="t">📝 흥미–희망 불일치</span><span class="memo-text">진로심리검사에서 예술형(A) 흥미가 높게 나왔으나 희망 진로는 회계사로, 흥미와 희망이 달라 상담을 진행함. 상담에서 '안정적인 직업'을 중요하게 여기는 이유를 이야기했고, 디자인과 회계를 접목한 분야를 함께 탐색해 대안 진로를 3가지로 넓힘.</span><span class="ins">＋ 이 예시 넣기</span></button>
+        <button class="memo-btn memo-card" data-target="memoSlot"><span class="t">🔑 키워드형 (단어로만)</span><span class="memo-text">희망직업: 데이터 분석가 / 파이썬 기초 독학 / 학급 급식 만족도 설문 실시 / 결과 그래프화·발표 / 통계학·빅데이터로 관심 확장 / 후속: 관련 도서 대출, 빅데이터 진로특강 신청</span><span class="ins">＋ 이 예시 넣기</span></button>
+      </div>
+      <script>
+      document.addEventListener('click',function(e){
+        var b=e.target.closest('.memo-btn'); if(!b)return;
+        var s=document.getElementById(b.dataset.target); if(!s)return;
+        var el=b.querySelector('.memo-text');
+        var txt=el?el.textContent.trim():(b.dataset.memo||'');
+        s.textContent=txt; s.style.color='#8FE39B'; setTimeout(function(){s.style.color='';},1200);
+        s.scrollIntoView({block:'center',behavior:'smooth'});
+      });
+      </script>
+
+      <h3>기법 1 · 🎭 페르소나(역할) — "가면 씌우기"</h3>
+      <p>AI에게 그냥 시키지 마세요. <b>역할을 먼저 부여</b>하면 말투부터 내용의 깊이까지 '전문가 버전'으로 바뀝니다.</p>
+      <table class="cmp">
+        <thead><tr><th>❌ 그냥</th><th>✅ 가면 씌우기</th></tr></thead>
+        <tbody>
+          <tr><td>"자기소개서 써줘"</td><td>"너는 <b style="color:#C0392B">입시 컨설턴트</b>야. 이 자소서에서 가장 설득력 없는 부분을 콕 집어서 말해줘."</td></tr>
+          <tr><td>"이 글 좀 봐줘"</td><td>"너는 <b style="color:#C0392B">까다로운 국어 선생님</b>이야. 문장 어색한 부분을 전부 표시해줘."</td></tr>
+          <tr><td>"공부 계획 짜줘"</td><td>"너는 <b style="color:#C0392B">수능을 100일 앞둔 학생의 담임 선생님</b>이야. 현실적인 플래너를 만들어줘."</td></tr>
+        </tbody>
+      </table>
+      <div style="height:5em"></div>
+      <p style="margin-top:16px"><b>진로교사 실전 · 입학사정관 관점 냉정 점검</b> — "너는 입학사정관이야"로 학생 자료의 약점을 객관적으로 봅니다.</p>
+      <div class="prompt"><button class="copy">복사</button><span class="label">실전 · 입학사정관</span>너는 <span style="color:#FF8F8F; font-weight:700">15년차 대입 입학사정관</span>이야. 아래 학생의 진로활동 기록을 학생부종합전형 평가자 관점에서 읽고, '가장 설득력 없는 부분' 3가지와 보완 방향을 냉정하게 짚어줘. <span id="recordSlot" class="memo-slot">[기록 붙여넣기]</span></div>
+      <p style="font-size:.98rem; color:var(--steel); margin:12px 0 6px">👇 예시 기록 — 누르면 위 프롬프트의 [기록] 자리에 들어갑니다.</p>
+      <div class="memo-cards">
+        <button class="memo-btn memo-card" data-target="recordSlot"><span class="t">📄 평범한 나열형</span><span class="memo-text">진로 시간에 다양한 직업을 조사하고 발표함. 의사라는 직업에 관심을 가지고 관련 영상을 시청함. 진로 캠프에 참여하여 여러 체험을 함. 봉사활동에 성실히 참여함.</span><span class="ins">＋ 이 예시 넣기</span></button>
+        <button class="memo-btn memo-card" data-target="recordSlot"><span class="t">📄 활동은 있으나 연계 약함</span><span class="memo-text">생명과학에 흥미를 느껴 '유전자 가위'를 주제로 보고서를 작성함. 관련 도서를 읽고 동아리에서 발표함. 이후 생명공학 관련 대학 탐방을 다녀옴.</span><span class="ins">＋ 이 예시 넣기</span></button>
+        <button class="memo-btn memo-card" data-target="recordSlot"><span class="t">📄 희망–활동 불일치</span><span class="memo-text">경영학과 진학을 희망함. 학교 축제에서 부스를 운영하고 사진 동아리 활동을 함. 진로 검사에서 예술형 흥미가 높게 나옴.</span><span class="ins">＋ 이 예시 넣기</span></button>
+      </div>
+      <p><a class="abtn green" href="https://share.gemini.google/lOfFcueQsF47" target="_blank" rel="noopener">🔗 위 프롬프트를 넣었을 때의 답변 예시 보기</a></p>
+
+      <div class="teacher-zone">
+      <div style="padding:16px 22px; background:#FBE3C7; border:1px solid #F0C48A; border-radius:14px">
+        <h3 style="font-weight:800; font-size:1.25rem; color:#B45309; margin:0">👩‍🏫 교사 업무 프롬프트 모음 <span style="font-size:1rem; color:var(--steel); font-weight:500">(상담·행정)</span></h3>
+        <div style="color:var(--slate); margin-top:4px">상담·행정 업무를 AI로 효율화하는 프롬프트예요. 필요할 때 펼쳐 복사하세요.</div>
+      </div>
+      <div class="tech">
+      <details>
+        <summary>📝 학생 상담 기록 요약 <span class="k">복사 실습</span></summary>
+        <div class="body-in">
+          <div class="prompt"><button class="copy">복사</button>[역할] 너는 15년 경력의 전문 진로상담교사야.
+[상황] 상담 내용을 요약하여 학기말 상담 일지에 기록하려고 해. 아래 상담 내용을 바탕으로 '주요 고민', '상담 내용 요약', '향후 지도 방향'으로 정리해 줘.
+[상담 내용] (여기에 상담 메모 붙여넣기)</div>
+        </div>
+      </details>
+      <details>
+        <summary>✉️ 진로 행사 가정통신문 <span class="k">복사 실습</span></summary>
+        <div class="body-in">
+          <div class="prompt"><button class="copy">복사</button>[역할] 학교 진로부장 교사야.
+[상황] 학부모님들께 '진로 비전 캠프' 참가 안내 가정통신문을 보내야 해.
+[조건] 정중하고 신뢰감 있는 어조로 작성할 것, 캠프 일시(0월 0일), 장소(00실), 준비물(00) 항목을 포함하여 가독성 있게 작성할 것.</div>
+        </div>
+      </details>
+      <details>
+        <summary>🎓 학생 맞춤 학과 추천 <span class="k">복사 실습</span></summary>
+        <div class="body-in">
+          <div class="prompt"><button class="copy">복사</button>[역할] 진로진학 전문가야.
+[상황] 한 학생의 희망 분야는 [여기에 분야 작성]이고, 강점은 [여기에 강점 작성]이야.
+[작업] 이 학생에게 적합한 대학 학과 3곳을 추천하고, 각 학과에 진학하기 위해 고교 시절 준비해야 할 교과목이나 활동을 구체적으로 알려줘.</div>
+        </div>
+      </details>
+      <details>
+        <summary>📖 다문화·학습부진 학생용 진로 읽기 자료 <span class="k">복사 실습</span></summary>
+        <div class="body-in">
+          <div class="prompt"><button class="copy">복사</button>[역할] 너는 중·고등학생을 대상으로 하는 15년 차 베테랑 진로진학상담교사야.
+[상황] 내가 지도하는 학생 중 '자동차 디자이너'를 꿈꾸는 학생이 있어. 하지만 한국어 어휘력이 조금 부족하고 긴 글 읽기를 어려워해.
+[작업] 이 학생이 '자동차 디자이너가 되는 과정과 필요한 역량'을 쉽게 이해할 수 있도록 진로 읽기 자료를 만들어줘.
+[조건]
+1. 초등학교 3~4학년 수준의 쉬운 어휘와 단문 위주로 작성해 줄 것.
+2. 글의 길이는 공백 제외 500자 내외로 짧게 끊어줘.
+3. 마지막에는 학생이 읽고 스스로 생각해 볼 수 있는 '나만의 질문' 2가지를 포함해 줘.</div>
+        </div>
+      </details>
+      </div>
+      </div>
+
+      <div class="student-zone">
+      <div style="padding:16px 22px; background:#DCEAF9; border:1px solid #BBD8F0; border-radius:14px">
+        <h3 class="toc-blue" style="font-weight:800; font-size:1.25rem; color:#1F5F9E; margin:0">👩‍🎓 학생용 — 진로활동에서 학생과 함께 쓰는 추천 프롬프트</h3>
+        <div style="color:var(--slate); margin-top:4px">수업·상담·진로활동에서 학생에게 "이렇게 물어봐"라고 제언할 수 있는 예시입니다. (아래 PCGF 로드맵 · CoT · 리버스 · 메타 · ToT)</div>
+      </div>
+      <div style="height:5em"></div>
+      <h3 style="margin-top:1.2em">실습 — PCGF로 진로 로드맵 뽑기</h3>
+      <p class="lead">앞서 배운 PCGF 구조 그대로입니다(페르소나·맥락·목표·형식). 학교급에 맞게 좌·우를 골라 아래 프롬프트를 통째로 복사해 실습하세요.</p>
+      <div style="height:2em"></div>
+      <div class="grid">
+        <div>
+          <div class="lvl hi">고교 예시</div>
+          <div class="prompt"><button class="copy">복사</button><span class="label hi">PCGF · 고교</span>Persona (페르소나): "너는 20년 경력의 베테랑 진로 상담사야."
+Context (맥락): "나는 이제 막 고등학교에 입학했고, <span style="color:#8FB4FF; font-weight:700">IT와 수학</span>에 관심이 많아."
+Goal (목표): "내가 고교 3년 동안 집중해야 할 핵심 역량 3가지를 알려줘."
+Format (형식): "표 형태로 정리하고, 각 역량별 추천 도서도 한 권씩 넣어줘."</div>
+          <div class="prompt"><button class="copy">복사</button><span class="label hi">이어서 · 고교</span>구체적인 활동 로드맵을 짜줘.</div>
+        </div>
+        <div>
+          <div class="lvl mid">중학 예시</div>
+          <div class="prompt"><button class="copy">복사</button><span class="label mid">PCGF · 중학</span>Persona (페르소나): "너는 20년 경력의 베테랑 진로 상담사야."
+Context (맥락): "나는 이제 막 중학교에 입학했고, <span style="color:#8FB4FF; font-weight:700">그림 그리기와 컴퓨터</span>에 관심이 많아."
+Goal (목표): "내가 중학교 3년 동안 탐색해 보면 좋은 진로 분야 3가지를 알려줘."
+Format (형식): "표 형태로 정리하고, 각 분야별로 지금 해보면 좋은 활동과 추천 도서를 하나씩 넣어줘."</div>
+          <div class="prompt"><button class="copy">복사</button><span class="label mid">이어서 · 중학</span>구체적인 활동 로드맵을 짜줘.</div>
+        </div>
+      </div>
+      <div style="height:2em"></div>
+      <div class="tip">👉 이 대화로 만든 <b>로드맵을 바탕으로, 이어서 "나만의 로드맵 웹페이지"를 만듭니다.</b> PCGF로 내용 뽑기 → 로드맵 → 웹페이지 제작으로 자연스럽게 <b>바이브코딩(2차시)</b>과 연결됩니다.</div>
+      <div class="prompt"><button class="copy">복사</button><span class="label">이어서 · 웹페이지 만들기</span>위 내용으로 내 로드맵을 웹페이지로 만들어줘.</div>
+      <p><a class="abtn" href="https://share.gemini.google/f5VvoqIE3rPX" target="_blank" rel="noopener">🔗 로드맵 웹페이지 — 실제 만들어진 예시 보기</a></p>
+      <p><a class="abtn" href="https://share.gemini.google/eYwVhindhzxO" target="_blank" rel="noopener">💬 로드맵이 만들어지기까지 — 제미나이와의 대화창 보기</a></p>
+
+      <h3>고급 프롬프트 기법 — CoT · 리버스 · 메타 · ToT</h3>
+      <p class="lead">기법마다 고등학교·중학교 예시를 함께 담았습니다. 학교급에 맞게 골라 실습하세요. 예시는 모두 복사 버튼으로 바로 쓸 수 있습니다.</p>
+
+      <div class="tech">
+
+      <details open>
+        <summary>CoT (사고의 사슬) — 단계별로 생각하게 하기 <span class="k">체험</span></summary>
+        <div class="body-in">
+          <p><b>개념</b> · AI가 '단계별로 생각(Think step by step)'하며 그 과정을 보여주게 하는 기법. 프롬프트에 <b>"단계별로 보여줘 / 사고 과정을 보여줘 / CoT를 적용해줘"</b>를 넣습니다.</p>
+          <p style="color:var(--steel)">일반 "정답을 알려줘" → 결과만. CoT "풀이 과정을 생략하지 말고 하나씩 적으면서 풀어" → 사고 과정까지 보여줍니다.</p>
+          <div class="grid">
+          <div class="prompt"><button class="copy">복사</button><span class="label hi">고교 예시</span>나는 고등학교 1학년이야. 다음 단계에 따라 나에게 어울리는 진로 분야를 추천해줘.
+1단계: 내가 좋아하는 과목<span style="color:#8FB4FF; font-weight:700">(수학, 미술)</span>과 취미<span style="color:#8FB4FF; font-weight:700">(레고 조립)</span>를 분석해줘.
+2단계: 이 요소들이 공통적으로 필요로 하는 역량이 무엇인지 찾아줘.
+3단계: 그 역량을 활용할 수 있는 <span style="color:#FF8F8F; font-weight:700">미래 직업 3가지</span>를 제안하고 이유를 설명해줘.</div>
+          <div class="prompt"><button class="copy">복사</button><span class="label mid">중학 예시</span>나는 중학교 1학년이야. 다음 단계에 따라 나에게 어울리는 진로 분야를 추천해줘.
+1단계: 내가 좋아하는 과목<span style="color:#8FB4FF; font-weight:700">(체육, 과학)</span>과 취미<span style="color:#8FB4FF; font-weight:700">(영상 보기, 만들기)</span>를 분석해줘.
+2단계: 이 요소들이 공통적으로 필요로 하는 능력이 무엇인지 찾아줘.
+3단계: 그 <span style="color:#FF8F8F; font-weight:700">능력을 살릴 수 있는 직업 3가지</span>를 쉬운 말로 설명해줘.</div>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>리버스 프롬프팅 — "결과물에서 레시피 추출하기" <span class="k">체험</span></summary>
+        <div class="body-in">
+          <p>좋은 결과물을 보고 <b>감탄만 하지 마세요.</b> '설계자'는 그 뒤의 <b>레시피(프롬프트)</b>를 궁금해합니다. 잘 쓴 글을 AI에게 보여주고 이렇게 물어보세요.</p>
+          <div class="prompt"><button class="copy">복사</button>💬 이 자기소개서와 비슷한 수준으로 쓰고 싶어. 어떤 프롬프트를 써야 해?</div>
+          <div class="prompt"><button class="copy">복사</button>💬 이 수행평가 보고서를 분석해서, 이 정도 수준의 글을 쓰기 위한 최적의 프롬프트를 만들어줘.</div>
+          <div class="prompt"><button class="copy">복사</button>💬 이 에세이의 논리 구조와 톤을 분석하고, 비슷하게 쓸 수 있는 프롬프트 틀을 만들어줘.</div>
+          <p style="color:var(--steel); font-size:1rem">※ 위 프롬프트와 함께 실제 잘 쓴 글(자소서·보고서·에세이)을 붙여넣어 주세요.</p>
+          <div style="height:3em"></div>
+          <p style="margin-top:18px"><b>또 다른 리버스 — 목표(결과물)를 주고 프롬프트 목록을 역으로 뽑기</b></p>
+          <div class="prompt"><button class="copy">복사</button><span class="label hi">고교 예시</span><span style="color:#8FB4FF; font-weight:700">청강문화예술대학교 애니메이션과</span>에 합격하기 위해
+내가 고교 3년 동안 AI에게 어떤 질문을 던지고 어떤 활동을 가이드 받아야 할지,
+역으로 프롬프트 목록을 작성해줘.</div>
+          <div class="prompt"><button class="copy">복사</button><span class="label mid">중학 예시</span>특성화고인 <span style="color:#8FB4FF; font-weight:700">한국디지털미디어고등학교(디미고)</span>에 합격하기 위해,
+내가 중학교 3년 동안 AI에게 어떤 질문을 던지고 어떤 활동을 준비해야 할지,
+역으로 프롬프트 목록을 만들어줘.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>메타 프롬프팅 — AI가 인터뷰로 나를 발견하게 하기 <span class="k">체험</span></summary>
+        <div class="body-in">
+          <p>AI가 나에게 <b>질문을 하나씩 던지며 인터뷰</b>하고, 그 답을 모아 결과(진로·학과 추천, 슬로건)를 만들어줍니다.</p>
+          <div class="prompt"><button class="copy">복사</button><span class="label hi">고교 예시</span>너는 나의 잠재력을 발굴하는 인터뷰어야.
+내 진로를 분석하기 위해 <span style="color:#FF8F8F; font-weight:700">나에게 질문을 하나씩 총 5번 던져줘</span>.
+답변이 다 끝나면 나에게 가장 잘 어울리는 학과 3개를 추천해줘.
+그리고 나를 한 문장으로 정의하는 '퍼스널 브랜드 슬로건'을 만들어줘.</div>
+          <div class="prompt"><button class="copy">복사</button><span class="label mid">중학 예시</span>너는 나의 잠재력을 발굴하는 인터뷰어야.
+내 진로를 찾기 위해 <span style="color:#FF8F8F; font-weight:700">나에게 질문을 하나씩 총 5번 던져줘</span>.
+답이 다 끝나면 나에게 잘 어울리는 진로 분야 3가지를 추천해줘.
+그리고 나를 한 문장으로 표현하는 '나만의 슬로건'을 만들어줘.</div>
+          <p style="margin-top:16px"><b>👩‍🎓 학생 진로연계 수업 예시</b> — 실제 수업에서 학생들과 이 프롬프트로 활동한 결과물 패들렛</p>
+          <div class="padlet-embed"><iframe src="https://padlet.com/doramge/joo-is-2026-fpwbv46o1hr6yz4" allow="camera;microphone;geolocation" title="학생 진로연계 수업 패들렛"></iframe></div>
+          <p><a class="padlet-link" href="https://padlet.com/doramge/joo-is-2026-fpwbv46o1hr6yz4" target="_blank" rel="noopener">↗ 패들렛 새 창으로 열기</a></p>
+        </div>
+      </details>
+
+      <details>
+        <summary>ToT (사고의 나무) — 여러 갈래를 펼쳐 비교하기 <span class="k">체험</span></summary>
+        <div class="body-in">
+          <p>가능한 선택지를 여러 갈래로 나눠 장단점을 비교·평가한 뒤 최선을 고르게 합니다.</p>
+          <div class="prompt"><button class="copy">복사</button><span class="label hi">고교 예시</span>내 꿈은 '환경 공학자'야.
+<span style="color:#FF8F8F; font-weight:700">이 꿈을 이루기 위한 3가지 서로 다른 고교 생활 로드맵(학술 중심, 발명/메이커 중심, 사회봉사 중심)</span>을 제시해줘.
+각 로드맵의 장단점을 비교해서 내가 어떤 성향일 때 유리할지 표로 정리해줘.</div>
+          <div class="prompt"><button class="copy">복사</button><span class="label mid">중학 예시</span>내 꿈은 '요리사'야.
+<span style="color:#FF8F8F; font-weight:700">이 꿈을 향해 가는 3가지 서로 다른 중학교 생활 방법(요리 실습 중심, 콘텐츠 제작 중심, 봉사·나눔 중심)</span>을 제시해줘.
+각 방법의 장단점을 비교해서 내가 어떤 성향일 때 잘 맞을지 표로 정리해줘.</div>
+        </div>
+      </details>
+      </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ===== TAB 4 · 2차시 ===== -->
+<div class="panel" id="p-s2">
+  <div class="wrap">
+    <section class="block">
+      <div class="kicker">Session 2</div>
+      <h2>바이브코딩 이해와 함께 만들기</h2>
+
+      <div class="section-box">
+      <div class="kicker" style="margin-top:12px">개념</div>
+      <h3 style="margin:.2em 0 3em">바이브코딩이란? — 코딩을 배운 적 없어도, AI와 대화하며 앱을 만드는 방식</h3>
+      <p>바이브코딩은 코드를 직접 짜는 게 아니라, <b>하고 싶은 것을 말로 설명하면 AI가 작동하는 앱을 만들어 주는</b> 방식입니다. 자연어(한국어든 영어든 일상 언어)로 AI에게 명령하면 코드나 앱이 자동으로 생성돼요. 제미나이의 <b>Canvas</b> 기능을 켜고 원하는 도구를 설명하면 그 자리에서 클릭·입력이 되는 웹 앱이 만들어집니다 — <b>코딩 지식이 전혀 없어도</b> 나만의 진로 수업 도구를 만들 수 있습니다.</p>
+      <div style="height:2em"></div>
+
+      <div class="card card-cream" style="background:#FCDCB8; border-color:#F0B979">
+        <h4 style="margin-top:6px">📜 '바이브코딩', 누가 만들었을까? — 안드레이 카파시(Andrej Karpathy)</h4>
+        <p style="margin:8px 0 0">2025년, AI 연구자 안드레이 카파시가 제시한 프로그래밍 패러다임입니다. OpenAI 공동 창립 멤버이자 테슬라 AI 디렉터를 지낸 그가 "AI에게 분위기(vibe)만 전달하고 코드의 존재는 잊은 채 개발하는 방식"을 소개하며 이 용어가 널리 퍼졌습니다.</p>
+        <p style="margin:10px 0 0"><b>Vibe = 분위기·느낌·무드·감성</b> — 코드 한 줄 한 줄을 따지는 대신, 내가 원하는 느낌과 방향을 AI에게 전달하면 AI가 코드를 완성해줍니다. 그래서 '바이브' 코딩이에요.</p>
+      </div>
+
+      </div>
+
+      <div class="section-box">
+      <div class="kicker" style="margin-top:12px">쉽게 이해하기</div>
+      <h3 style="margin-top:.2em">비유로 보는 바이브코딩</h3>
+      <div class="grid">
+        <div class="card"><b>🍮 떡볶이집 사장님께 부탁하듯</b><br><span style="color:var(--steel)">"매운맛 3단계, 소스 점도 15%"까지 안 말해도 "매콤달콤한데 끝에 확 매워지는, 로제처럼 부드러운 맛으로요!" 하면 사장님이 그 '바이브'를 이해하고 만들어주죠. 바이브코딩도 똑같아요.</span></div>
+        <div class="card"><b>🚕 "그냥 멋진 곳으로 가주세요"</b><br><span style="color:var(--steel)">목적지를 안 말하면 기사님도 몰라요. "알아서 멋진 앱 만들어줘"도 마찬가지 — 느낌(바이브)을 설명하는 것과 아무 말 안 하는 건 달라요.</span></div>
+      </div>
+      <div style="height:5em"></div>
+      <h4>같은 AI, 다른 결과</h4>
+      <div class="grid">
+        <div class="card" style="background:#FCEBEA; border-color:#E5A395"><span class="badge s">❌ 막연한 부탁</span><p style="margin:8px 0 0">"학교생활 앱을 멋지게 만들어줘." → 엉뚱한 앱이 나올 확률이 높아요.</p></div>
+        <div class="card" style="background:#EDF6E6; border-color:#B7D79E"><span class="badge t">✅ 구체적인 설명</span><p style="margin:8px 0 0">"준비물을 자주 빠뜨리는 중학생이 요일별 준비물을 확인하고 체크할 수 있는 앱을 만들어줘."</p></div>
+      </div>
+      <div style="height:2em"></div>
+      <div class="tip">😵 <b>기획 없이 시작</b>: 막연한 요청 → 엉뚱한 앱 → 수정 또 수정 → 시간 종료<br>😎 <b>기획하고 시작</b>: 문제·사용자 파악 → 핵심 기능 결정 → 정확한 프롬프트 → 앱 완성</div>
+      </div>
+
+
+      <div class="section-box">
+      <div class="kicker" style="margin-top:12px">도구</div>
+      <h3 class="toc-bold toc-blue" style="margin-top:.2em">아이디어를 실현할 도구</h3>
+      <p>카드를 클릭하면 각 도구 페이지로 연결됩니다. <b>이 연수에서는 제미나이(Canvas)와 캔바AI를 중심으로</b> 실습합니다.</p>
+      <div class="ladder">
+        <a class="card tool-card" style="background:#FCEBEA; border-color:#E9B7B0" href="https://gemini.google.com/" target="_blank" rel="noopener"><span class="badge t">이 연수 사용</span><h4 style="margin:8px 0 2px">✨ Gemini Canvas</h4><span style="color:var(--steel)">구글 제미나이 · 캔버스</span></a>
+        <a class="card tool-card" style="background:#FCEBEA; border-color:#E9B7B0" href="https://www.canva.com/brand/join?token=3wJHr0bNytMTpsqeP5XnSA&amp;brandingVariant=edu&amp;invitationDestinationType=group" target="_blank" rel="noopener"><span class="badge t">이 연수 사용</span><h4 style="margin:8px 0 2px">🎨 Canva AI</h4><span style="color:var(--steel)">디자인 · 이미지 생성 · 팀 참여</span></a>
+        <a class="card tool-card" href="https://claude.ai/" target="_blank" rel="noopener"><span class="badge s">보조</span><h4 style="margin:8px 0 2px">🤖 Claude</h4><span style="color:var(--steel)">아티팩트 · 미니 앱</span></a>
+        <a class="card tool-card" href="https://aistudio.google.com/" target="_blank" rel="noopener"><span class="badge s">보조</span><h4 style="margin:8px 0 2px">🧪 Google AI Studio</h4><span style="color:var(--steel)">고급 실험 · 프로토타입</span></a>
+      </div>
+      <h4>그 외 알아두면 좋은 바이브코딩 도구</h4>
+      <div class="grid5">
+        <a class="card tool-card" href="https://www.cursor.com/" target="_blank" rel="noopener"><b>⚡ Cursor</b></a>
+        <a class="card tool-card" href="https://replit.com/" target="_blank" rel="noopener"><b>🌐 Replit</b></a>
+        <a class="card tool-card" href="https://lovable.dev/" target="_blank" rel="noopener"><b>💜 Lovable</b></a>
+        <a class="card tool-card" href="https://antigravity.google/" target="_blank" rel="noopener"><b>🚀 Antigravity</b></a>
+        <a class="card tool-card" href="https://opal.withgoogle.com/" target="_blank" rel="noopener"><b>🔮 Opal</b></a>
+      </div>
+      <div class="tip">💡 새로운 도구가 지금도 계속 나옵니다. 원리는 같아요 — 말로 설명하면 AI가 만들어 줍니다.</div>
+      </div>
+
+      <h3>▶️ 시작하기 — 제미나이 Canvas 켜기</h3>
+      <div class="note">제미나이 로그인 → 프롬프트 입력창 아래 <b>도구 〉 📐 Canvas</b> 선택 → 프롬프트 입력! 오른쪽 창에 앱이 바로 만들어집니다. 오류가 나면 <b>"이 오류를 고쳐줘"</b>라고 그대로 말해도 돼요.</div>
+
+      <div class="section-box">
+      <div class="kicker" style="margin-top:12px">첫걸음</div>
+      <h3 class="toc-red" style="margin-top:.2em">🎴 첫 작품 — '미래의 나' 명함 만들기</h3>
+      <p>워크숍 첫 실습으로 추천! <b>로직이 없어 실패가 없고, 3분 만에 내 명함</b>이 나옵니다. 만든 뒤 "카드 색을 파스텔 블루로 바꿔줘" 한마디로 <b>대화로 고치기(티키타카)</b>까지 체험하세요.</p>
+      <div class="prompt"><button class="copy">복사</button><span class="label">첫 작품 · 명함</span>너는 감각 좋은 웹 프런트엔드 개발자이자 UI 디자이너야. 브라우저에서 바로 실행되는 단일 HTML 파일 형태로 '미래의 나' 명함 만들기 웹앱을 만들어줘.
+[기능]
+1. 입력 화면: 이름 / 희망 직업 / 나의 좌우명 / 10년 후 목표 4가지를 입력하는 폼과 '명함 만들기' 버튼.
+2. 결과 화면: 입력한 내용으로 가로형 명함 카드를 예쁘게 그려서 보여줘. (이름은 크게, 희망 직업은 부제로, 좌우명·목표는 아래에)
+3. '이미지로 저장' 버튼을 눌러 명함을 PNG 이미지로 다운로드할 수 있게 해줘.
+4. '다시 만들기' 버튼으로 처음으로 돌아가기.
+[디자인] 파스텔톤 배경, 둥근 모서리, 부드러운 그림자, 이모지 아이콘으로 감성적이고 세련되게. 글씨 잘 보이게, 버튼은 크게.
+[조건] HTML·CSS·JavaScript를 모두 담은 하나의 파일로. 이미지 저장에 필요하면 CDN 라이브러리 하나 정도는 써도 돼.</div>
+      <p><a class="abtn" href="미래의나_명함.html" target="_blank" rel="noopener">🎴 완성 예시 열기 — 미래의 나 명함</a></p>
+      <div class="tip">💡 만든 직후 → <b>"카드 색을 파스텔 블루로 바꿔줘"</b> 한마디 시켜보기 = 티키타카 '우와' 포인트!</div>
+
+      <h3 class="toc-red">🧭 두 번째 작품 — 진로 성향 테스트</h3>
+      <p>명함으로 자신감을 얻었다면, 이제 <b>로직이 들어간 '작동하는 테스트'</b>로 확장하세요. "이건 다음 수업에 바로 쓰겠다"가 나옵니다.</p>
+      <div class="prompt"><button class="copy">복사</button><span class="label">두 번째 작품 · 성향 테스트</span>진로 성향 테스트 웹앱 만들어줘. 8개 질문에 답하면 4가지 진로 성향 유형(탐구형·예술형·사회형·실용형) 중 하나로 결과가 나오고, 각 유형에 어울리는 직업 3~5개와 한 줄 설명을 함께 보여줘. 단일 HTML 파일, 파스텔톤 디자인, 결과 화면에 '다시 하기' 버튼도 넣어줘.</div>
+      <p><a class="abtn" href="진로성향테스트.html" target="_blank" rel="noopener">🧭 완성 예시 열기 — 진로 성향 테스트</a></p>
+
+      <h3 class="toc-red">🛠️ 세 번째 작품 — 내가 필요한 도구 직접 만들기</h3>
+      <p>이제 명함·테스트를 넘어, <b>내가 진짜 필요한 도구를 스스로 기획</b>해서 만들 차례예요. 아래 '만능 틀'의 빈칸만 채우면 됩니다.</p>
+      <div class="prompt"><button class="copy">복사</button><span class="label">세 번째 작품 · DIY 만능 틀</span>너는 친절하고 실력이 뛰어난 코딩 강사야. 내가 프로그래밍 지식이 전혀 없다는 점을 고려해서, 브라우저에서 바로 실행할 수 있는 '단일 HTML 파일' 형태의 웹 도구를 만들어줘.
+1. 내가 만들고 싶은 도구: <span id="diyTool" class="diy-slot">[ 도구 이름 (예: 학부모 상담 기록기 / 진로 퀴즈 등) ]</span>
+2. 주요 기능: <span id="diyFeat" class="diy-slot">[ 이 도구가 해야 할 핵심 기능 ]</span>
+3. 디자인 느낌: <span id="diyDesign" class="diy-slot">[ 예: 깔끔하고 따뜻한 느낌 / 학교 행정용 ]</span>
+HTML, CSS, JavaScript가 모두 포함된 하나의 완성된 코드 블록을 만들어줘. 외부 이미지·라이브러리 연결 없이 기본 코드만으로 작동해야 해.</div>
+      <p style="margin-top:14px"><b>💡 아래 예시를 누르면 위 프롬프트 빈칸이 자동으로 채워져요</b> <span style="color:var(--steel)">(파란 글씨가 빈칸에 들어가는 내용)</span> <button id="diyReset" class="memo-btn" type="button" style="background:#FCEBEA; border-color:#E4A79C; color:#c0392b">↺ 빈칸으로 초기화</button></p>
+      <div class="grid3">
+        <button class="diy-ex" data-tool="학부모 상담 기록기" data-feat="이름·상담일·내용 입력 → 목록 저장 → 텍스트로 내보내기" data-design="깔끔한 학교 행정용"><b>① 학부모 상담 기록기</b>
+          <p style="margin:6px 0 0">도구: <span class="be">학부모 상담 기록기</span><br>기능: <span class="be">이름·상담일·내용 입력 → 목록 저장 → 텍스트로 내보내기</span><br>디자인: <span class="be">깔끔한 학교 행정용</span></p>
+          <span class="ins">＋ 이 예시로 채우기</span>
+        </button>
+        <button class="diy-ex" data-tool="진로 골든벨 퀴즈" data-feat="직업·학과 문제 출제 → 정답 확인 → 점수 집계" data-design="밝고 활기찬 퀴즈쇼"><b>② 진로 골든벨 퀴즈</b>
+          <p style="margin:6px 0 0">도구: <span class="be">진로 골든벨 퀴즈</span><br>기능: <span class="be">직업·학과 문제 출제 → 정답 확인 → 점수 집계</span><br>디자인: <span class="be">밝고 활기찬 퀴즈쇼</span></p>
+          <span class="ins">＋ 이 예시로 채우기</span>
+        </button>
+        <button class="diy-ex" data-tool="오늘의 진로 명언 룰렛" data-feat="버튼 누르면 랜덤 명언 표시 → 마음에 드는 것 저장" data-design="따뜻하고 감성적인"><b>③ 진로 명언 룰렛</b>
+          <p style="margin:6px 0 0">도구: <span class="be">오늘의 진로 명언 룰렛</span><br>기능: <span class="be">버튼 누르면 랜덤 명언 표시 → 마음에 드는 것 저장</span><br>디자인: <span class="be">따뜻하고 감성적인</span></p>
+          <span class="ins">＋ 이 예시로 채우기</span>
+        </button>
+        <button class="diy-ex" data-tool="진로 상담 예약판" data-feat="학생이 상담 희망 요일·시간을 신청 → 목록에 쌓임 → 확정 표시" data-design="차분한 파스텔 톤"><b>④ 진로 상담 예약판</b>
+          <p style="margin:6px 0 0">도구: <span class="be">진로 상담 예약판</span><br>기능: <span class="be">학생이 상담 희망 요일·시간 신청 → 목록에 쌓임 → 확정 표시</span><br>디자인: <span class="be">차분한 파스텔 톤</span></p>
+          <span class="ins">＋ 이 예시로 채우기</span>
+        </button>
+        <button class="diy-ex" data-tool="학과 카드 뽑기" data-feat="버튼을 누르면 랜덤 학과 소개(하는 공부·관련 직업) 카드 표시 → 저장" data-design="산뜻하고 컬러풀한"><b>⑤ 학과 카드 뽑기</b>
+          <p style="margin:6px 0 0">도구: <span class="be">학과 카드 뽑기</span><br>기능: <span class="be">버튼 누르면 랜덤 학과 소개(하는 공부·관련 직업) 카드 → 저장</span><br>디자인: <span class="be">산뜻하고 컬러풀한</span></p>
+          <span class="ins">＋ 이 예시로 채우기</span>
+        </button>
+        <button class="diy-ex" data-tool="진로 목표 체크리스트" data-feat="이번 학기 진로 목표 입력·체크 → 달성률을 막대그래프로 표시" data-design="깔끔하고 동기부여되는"><b>⑥ 진로 목표 체크리스트</b>
+          <p style="margin:6px 0 0">도구: <span class="be">진로 목표 체크리스트</span><br>기능: <span class="be">이번 학기 진로 목표 입력·체크 → 달성률 막대그래프</span><br>디자인: <span class="be">깔끔하고 동기부여되는</span></p>
+          <span class="ins">＋ 이 예시로 채우기</span>
+        </button>
+      </div>
+      <script>
+      (function(){
+        var ids=['diyTool','diyFeat','diyDesign'];
+        var defs={};
+        ids.forEach(function(id){var s=document.getElementById(id); if(s)defs[id]=s.textContent;});
+        document.addEventListener('click',function(e){
+          var c=e.target.closest('.diy-ex');
+          if(c){
+            var map={diyTool:c.dataset.tool,diyFeat:c.dataset.feat,diyDesign:c.dataset.design};
+            ids.forEach(function(id){
+              var s=document.getElementById(id); if(!s)return;
+              s.textContent=map[id]; s.style.color='#8FE39B';
+              setTimeout(function(){s.style.color='';},1200);
+            });
+            var p=document.getElementById('diyTool').closest('.prompt');
+            if(p)p.scrollIntoView({block:'center',behavior:'smooth'});
+            return;
+          }
+          if(e.target.closest('#diyReset')){
+            ids.forEach(function(id){var s=document.getElementById(id); if(s){s.textContent=defs[id]; s.style.color='';}});
+          }
+        });
+      })();
+      </script>
+
+      <h3 class="toc-blue">📤 만든 작품 올리기 — 우리 패들렛</h3>
+      <p>완성한 명함·성향 테스트·나만의 도구를 아래 패들렛에 올려 서로 살펴봐요.</p>
+      <div class="padlet-embed"><iframe src="https://padlet.com/doramge1984/ai-dkx3ofntjwv55mn8" allow="camera;microphone;geolocation" title="작품 공유 패들렛"></iframe></div>
+      <p><a class="abtn" href="https://padlet.com/doramge1984/ai-dkx3ofntjwv55mn8" target="_blank" rel="noopener">↗ 패들렛 새 창으로 열기</a></p>
+      </div>
+
+      <div class="section-box">
+      <div class="kicker" style="margin-top:12px">진로 바이브코딩</div>
+      <h3 style="margin-top:.2em">진로교사를 위한 바이브코딩 프롬프트</h3>
+      <p>필요할 때 펼쳐 복사하세요. Gemini Canvas·Claude 아티팩트 모두 가능합니다.</p>
+      <div class="note">⚠️ Claude 아티팩트는 내 화면(로컬)에서만 실행돼 저장·공유가 어려워요. 저장·공유가 필요하면 html로 내려받거나 구글시트를 연동하세요.</div>
+      <div class="tech">
+      <details open>
+        <summary>🎓 학생과 함께 — 진로 수업 활동 <span class="k">프롬프트 모음</span></summary>
+        <div class="body-in">
+          <div class="prompt"><button class="copy">복사</button><span class="label">홀랜드 흥미유형 진단</span>홀랜드 흥미유형(RIASEC) 6개를 간단히 진단하는 웹앱 만들어줘. 12문항에 답하면 대표 유형 2개를 알려주고, 그 유형에 어울리는 직업 5개와 이유를 함께 보여줘.</div>
+          <div class="prompt"><button class="copy">복사</button><span class="label">직업 카드 매칭 게임</span>직업 카드 뒤집기 매칭 게임 만들어줘. 카드를 뒤집어 '직업'과 '하는 일'을 짝지으면 점수가 오르는 기억력 게임으로.</div>
+          <div class="prompt"><button class="copy">복사</button><span class="label">'미래의 나' 명함</span>'미래의 나' 명함 만들기 웹앱 만들어줘. 이름·희망 직업·좌우명·10년 후 목표를 입력하면 예쁜 명함 카드로 만들어 이미지로 저장할 수 있게.</div>
+          <div class="prompt"><button class="copy">복사</button><span class="label">진로 성향 테스트</span>진로 성향 테스트 만들어줘. 질문 8개에 답하면 4가지 진로 성향 유형 중 하나로 결과가 나오고, 어울리는 직업군을 추천해줘.</div>
+          <div class="prompt"><button class="copy">복사</button><span class="label">MBTI–직업 추천</span>MBTI 관련 웹페이지를 만들 거야. MBTI 문제 8개 정도 내주고, 선택에 따라 MBTI 유형과 어울리는 직업 3~5개를 알려주는 페이지를 만들어줘.</div>
+        </div>
+      </details>
+      <details>
+        <summary>👩‍🏫 교사 업무 — 내가 직접 만드는 도구 <span class="k">프롬프트 모음</span></summary>
+        <div class="body-in">
+          <div class="prompt"><button class="copy">복사</button><span class="label">진로 로드맵 생성기</span>진로 로드맵 생성기 만들어줘. 학년·희망 진로·현재 활동을 입력하면 학년별로 준비할 활동을 타임라인으로 정리해 표로 보여주는 단일 HTML 앱으로.</div>
+          <div class="prompt"><button class="copy">복사</button><span class="label">진로 골든벨 퀴즈쇼</span>진로 골든벨 퀴즈쇼 앱 만들어줘. 직업·학과 OX/사지선다 문제를 내가 입력하면 학생들이 답하고 점수가 집계되는 화면으로.</div>
+          <div class="prompt"><button class="copy">복사</button><span class="label">내신 등급 계산기</span>내신 등급 계산기 만들어줘. 과목별 점수를 입력하면 평균과 예상 등급을 알려줘.</div>
+        </div>
+      </details>
+      </div>
+      <div class="tip">✅ <b>무엇을 + 어떤 기능 + 어떤 모양</b>, 세 가지를 구체적으로 말할수록 한 번에 원하는 결과가 나옵니다.</div>
+      </div>
+
+      <div class="student-zone">
+      <div style="padding:16px 22px; background:#DCEAF9; border:1px solid #BBD8F0; border-radius:14px; margin-bottom:10px">
+        <h3 style="font-weight:800; font-size:1.25rem; color:#1F5F9E; margin:0">👩‍🎓 학생용 — 학생과 함께 해보는 바이브코딩</h3>
+      </div>
+      <h3>🎮 학생과 바로 해볼 예시 — 바이브코딩 입문</h3>
+      <p>아래 프롬프트를 Gemini Canvas나 Claude에 붙여넣어 바로 시작해보세요.</p>
+      <div class="grid">
+        <div>
+          <div class="lvl hi">🎮 디노런 게임</div>
+          <div class="prompt"><button class="copy">복사</button><span class="label hi">1</span>스페이스키로 점프 뛰는 디노런 게임 만들어줘</div>
+          <div class="prompt"><button class="copy">복사</button><span class="label hi">2</span>캐릭터를 ○○○으로 바꿔줘</div>
+          <div class="prompt"><button class="copy">복사</button><span class="label hi">3</span>점프 뛸 때 효과음 나오게 해줘</div>
+          <p style="color:var(--steel)">💡 1번으로 만든 뒤 2·3번으로 이어서 수정 요청.</p>
+        </div>
+        <div>
+          <div class="lvl mid">🧠 MBTI 웹페이지</div>
+          <div class="prompt"><button class="copy">복사</button><span class="label mid">기본</span>MBTI 관련 웹페이지를 만들 거야. MBTI 문제 8개 정도 내주고, 선택에 따라 MBTI 유형을 알려주는 페이지를 만들어줘. 결과에 어울리는 직업도 3~5개 소개해줘.</div>
+          <div class="prompt"><button class="copy">복사</button><span class="label mid">추가 💘</span>진단한 MBTI 결과에 내가 좋아하는 사람의 MBTI를 넣는 칸을 만들고, 입력하면 나와의 궁합을 알려주는 페이지를 추가해줘.</div>
+          <p style="color:var(--steel)">💡 기본으로 먼저 만든 뒤 추가 버전을 이어서 붙여넣기.</p>
+        </div>
+      </div>
+
+      <h3 style="color:#1F5F9E">학생 작품 예시 — 코딩 없이 프롬프트만으로 제작</h3>
+      <p style="color:#1F5F9E">카드를 클릭하면 실제 작품 페이지로 연결됩니다.</p>
+      <div class="ladder">
+        <a class="card tool-card" href="https://singalmaro.github.io/%EA%B8%88%EC%86%8D%EA%B2%B0%ED%95%A9%EB%AA%A8%EB%8D%B8.html" target="_blank" rel="noopener"><b>⚛️ 금속결합 모델</b> <span style="color:var(--primary-deep); font-size:.9rem">🔗 바로가기</span><br><span style="color:var(--steel)">화학1 금속결합 시각화. 전자구름·전자바다·밴드 모형으로 과학적 모델의 다양성 이해. (Cursor AI)</span></a>
+        <a class="card tool-card" href="https://xltpfvkqkdlqmzheld.my.canva.site/" target="_blank" rel="noopener"><b>🏥 건강 출석부</b> <span style="color:var(--primary-deep); font-size:.9rem">🔗 바로가기</span><br><span style="color:var(--steel)">학생이 건강 상태를 직접 입력하는 학급경영 도구. 말하기 어려운 증상도 사전 공유. (Canva)</span></a>
+        <a class="card tool-card" href="https://claude.ai/public/artifacts/f8ff191a-ea7b-40ef-9c66-de0d44122a91" target="_blank" rel="noopener"><b>☀️ 태양의 고도 변화</b> <span style="color:var(--primary-deep); font-size:.9rem">🔗 바로가기</span><br><span style="color:var(--steel)">하루·계절별 남중고도 비교, 한옥 처마 원리 탐구. 카메라 이동·줌 지원. (Claude.ai)</span></a>
+        <a class="card tool-card" href="https://preeminent-baklava-636b0c.netlify.app/" target="_blank" rel="noopener"><b>🗺️ 인터랙티브 세계 지도</b> <span style="color:var(--primary-deep); font-size:.9rem">🔗 바로가기</span><br><span style="color:var(--steel)">국가를 색상으로 클릭 표시. 세계사 참여형 수업·모둠 비교 발표. (ChatGPT)</span></a>
+      </div>
+      </div>
+      <div style="height:7em"></div>
+
+
+    </section>
+  </div>
+</div>
+
+<!-- ===== TAB · 선물 ===== -->
+<div class="panel" id="p-gift">
+  <div class="wrap">
+    <section class="block">
+      <div class="kicker">Gift · 오늘의 선물</div>
+      <h2>🎁 당신을 위한 수업 도구 모음</h2>
+      <p class="lead">오늘 배운 것들을 바로 써먹을 수 있도록 — 단축키, 추천 사이트, 확장 프로그램을 모았어요. 앞으로 자료가 더 추가됩니다.</p>
+
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin:6px 0 8px">
+        <a href="https://www.youtube.com/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; background:#FF0000; color:#fff; text-decoration:none; font-weight:700; font-size:1.05rem; padding:13px 24px; border-radius:12px">▶ 유튜브 채널</a>
+        <a href="https://www.naver.com/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; background:#03C75A; color:#fff; text-decoration:none; font-weight:700; font-size:1.05rem; padding:13px 24px; border-radius:12px">N 네이버 블로그</a>
+        <a href="https://drive.google.com/file/d/1CFEJ8dvW8IxHSqfVHwz_fPa47aaf8ViG/view?usp=sharing" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; background:#F7500F; color:#fff; text-decoration:none; font-weight:700; font-size:1.05rem; padding:13px 24px; border-radius:12px">📖 진로교과서 PDF</a>
+      </div>
+
+      <div style="text-align:center; margin:10px 0 6px">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MjAgNTYwIiB3aWR0aD0iNTIwIiBoZWlnaHQ9IjU2MCI+CiAgPGRlZnM+CiAgICA8ZmlsdGVyIGlkPSJzaGFkb3ciPgogICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iMiIgc3RkRGV2aWF0aW9uPSI2IiBmbG9vZC1jb2xvcj0iIzAwMDAwMDE4Ii8+CiAgICA8L2ZpbHRlcj4KICA8L2RlZnM+CiAgPCEtLSDrsLDqsr0gLS0+CiAgPHJlY3Qgd2lkdGg9IjUyMCIgaGVpZ2h0PSI1NjAiIHJ4PSIxNiIgZmlsbD0iI2ZmZmZmZiIgZmlsdGVyPSJ1cmwoI3NoYWRvdykiLz4KCiAgPCEtLSDsoJzrqqkgLS0+CiAgPHRleHQgeD0iMjYwIiB5PSI3MiIgZm9udC1mYW1pbHk9IidOb3RvIFNhbnMgS1InLCAnQXBwbGUgU0QgR290aGljIE5lbycsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxMTExMTEiIHRleHQtYW5jaG9yPSJtaWRkbGUiPuyVhOy5qOyXkCDsnbzslrTrgpjshJwg7J297Jy866m0PC90ZXh0PgoKICA8IS0tIOuFuOuegCDtlZjsnbTrnbzsnbTtirgg67CV7IqkIC0tPgogIDxyZWN0IHg9IjgyIiB5PSI4OCIgd2lkdGg9IjM1NiIgaGVpZ2h0PSI0NiIgcng9IjQiIGZpbGw9IiNGRkUyMzQiLz4KICA8dGV4dCB4PSIyNjAiIHk9IjEyMCIgZm9udC1mYW1pbHk9IidOb3RvIFNhbnMgS1InLCAnQXBwbGUgU0QgR290aGljIE5lbycsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjciIGZvbnQtd2VpZ2h0PSI5MDAiIGZpbGw9IiMxMTExMTEiIHRleHQtYW5jaG9yPSJtaWRkbGUiPuyduOyDnSDrsJTrgIzripQgOOqwgOyngCDrrLjsnqU8L3RleHQ+CgogIDwhLS0g6rWs67aE7ISgIC0tPgogIDxsaW5lIHgxPSI0OCIgeTE9IjE1MiIgeDI9IjQ3MiIgeTI9IjE1MiIgc3Ryb2tlPSIjZThlOGU4IiBzdHJva2Utd2lkdGg9IjEiLz4KCiAgPCEtLSDrpqzsiqTtirgg7JWE7J207YWcIC0tPgogIDx0ZXh0IHg9IjQ4IiB5PSIxOTIiIGZvbnQtZmFtaWx5PSInTm90byBTYW5zIEtSJywgJ0FwcGxlIFNEIEdvdGhpYyBOZW8nLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE3IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjMjIyMjIyIj4xLiDrrLTsiqgg7J287J20IOyDneqyqOuPhCDquI3soJXsnLzroZwg67Cb7JWE65Ok7JesIOydtOq4sOyekDwvdGV4dD4KICA8dGV4dCB4PSI0OCIgeT0iMjMyIiBmb250LWZhbWlseT0iJ05vdG8gU2FucyBLUicsICdBcHBsZSBTRCBHb3RoaWMgTmVvJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNyIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzIyMjIyMiI+Mi4g64KY7J2YIOqwgOuKpeyEseydgCDrgZ3snbQg7JeG64ukLiDrgpwg6rGw64yA7ZWcIOyhtOyerOuLpC48L3RleHQ+CiAgPHRleHQgeD0iNDgiIHk9IjI3MiIgZm9udC1mYW1pbHk9IidOb3RvIFNhbnMgS1InLCAnQXBwbGUgU0QgR290aGljIE5lbycsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTciIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMyMjIyMjIiPjMuIOuBneuCoCDrlYzquYzsp4Ag64Gd64KcIOq3uCDslYTri4jri6QuIOuBneq5jOyngCDtlbTrs7TsnpAuPC90ZXh0PgogIDx0ZXh0IHg9IjQ4IiB5PSIzMTIiIGZvbnQtZmFtaWx5PSInTm90byBTYW5zIEtSJywgJ0FwcGxlIFNEIEdvdGhpYyBOZW8nLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE3IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjMjIyMjIyIj40LiDsg53qsIHrgqzsnLzrqbQg67CU66GcIOybgOyngeydtOyekC4g7Iuc6rCE7J2AIOuCmOydmCDtjrjsnbQg7JWE64uI64ukLjwvdGV4dD4KICA8dGV4dCB4PSI0OCIgeT0iMzUyIiBmb250LWZhbWlseT0iJ05vdG8gU2FucyBLUicsICdBcHBsZSBTRCBHb3RoaWMgTmVvJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNyIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzIyMjIyMiI+NS4g7ZWg6rGw66m0IOygleunkCDsnpjtlbTsp4gg65WM6rmM7KeAIOuwmOuzte2VmOyekC48L3RleHQ+CiAgPHRleHQgeD0iNDgiIHk9IjM5MiIgZm9udC1mYW1pbHk9IidOb3RvIFNhbnMgS1InLCAnQXBwbGUgU0QgR290aGljIE5lbycsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTciIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMyMjIyMjIiPjYuIOyduOyDneydgCDrsLDtjIXsnZgg7Jew7IaN7J2064ukLiDrlYzroaAg7JyE7ZeY7J2EIOqwkOyImO2VtOyVvO2VnOuLpC48L3RleHQ+CiAgPHRleHQgeD0iNDgiIHk9IjQzMiIgZm9udC1mYW1pbHk9IidOb3RvIFNhbnMgS1InLCAnQXBwbGUgU0QgR290aGljIE5lbycsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTciIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMyMjIyMjIiPjcuIOuLqCDtlZjro6jrj4Qg6re464OlIOyCtOyngCDrp5DsnpAuIO2VoCDsiJgg7J6I64ukLjwvdGV4dD4KICA8dGV4dCB4PSI0OCIgeT0iNDcyIiBmb250LWZhbWlseT0iJ05vdG8gU2FucyBLUicsICdBcHBsZSBTRCBHb3RoaWMgTmVvJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNyIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzIyMjIyMiI+OC4g64W466Cl7J2AIOuzteumrOuLpC4g7IyT7J287IiY66GdIOy7pOynhOuLpC48L3RleHQ+Cjwvc3ZnPg==" alt="아침에 일어나서 읽으면 좋은 문장" style="max-width:100%; width:420px; height:auto; border-radius:14px; box-shadow:0 8px 24px rgba(120,90,30,.12)">
+      </div>
+
+      <div class="card" style="margin-top:2em; padding:6px 24px 22px">
+      <h3>⌨️ 알아두면 편한 크롬 단축키</h3>
+      <table class="cmp">
+        <thead><tr><th>단축키</th><th>기능</th><th>활용 팁</th></tr></thead>
+        <tbody>
+          <tr><td><b>Ctrl + H</b></td><td>방문 기록(History) 열기</td><td>이전에 방문했던 사이트를 빠르게 찾을 때.</td></tr>
+          <tr><td><b>Ctrl + Shift + T</b></td><td>닫은 탭 다시 열기</td><td>실수로 닫아도 당황 금지! 여러 번 누르면 순차적으로 되살아나요.</td></tr>
+          <tr><td><b>Ctrl + Shift + B</b></td><td>북마크바 표시/숨기기</td><td>화면을 넓게 쓰는 '화면 다이어트' 기능.</td></tr>
+          <tr><td><b>Ctrl + Shift + V</b></td><td>서식 없이 붙여넣기</td><td>글꼴·색을 무시하고 텍스트만 깔끔하게.</td></tr>
+          <tr><td><b>Shift + Enter</b></td><td>프롬프트 창 줄바꿈</td><td>전송하지 않고 다음 줄로 넘어갈 때.</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <div style="height:4em"></div>
+      <div class="card" style="padding:6px 24px 22px">
+      <h3>🧩 크롬 확장 프로그램</h3>
+      <div class="grid3">
+        <a class="card tool-card" href="https://chromewebstore.google.com/search/AdGuard" target="_blank" rel="noopener"><b>🛡️ AdGuard 광고차단기</b><br><span style="color:var(--steel)">웹·영상 광고 차단</span></a>
+        <a class="card tool-card" href="https://chromewebstore.google.com/search/QR%20Code%20Generator" target="_blank" rel="noopener"><b>🔳 QR 코드 제너레이터</b><br><span style="color:var(--steel)">페이지를 QR로 즉시 변환</span></a>
+        <a class="card tool-card" href="https://chromewebstore.google.com/search/Allow%20Copy" target="_blank" rel="noopener"><b>📋 복사 허용 (Allow Copy)</b><br><span style="color:var(--steel)">복사 막힌 사이트에서 복사</span></a>
+        <a class="card tool-card" href="https://joo.is/" target="_blank" rel="noopener"><b>🔗 Joois QuickShortener</b><br><span style="color:var(--steel)">단축주소 만들기</span></a>
+        <a class="card tool-card" href="https://bitly.com/" target="_blank" rel="noopener"><b>🔗 Bitly</b><br><span style="color:var(--steel)">단축주소·QR 만들기</span></a>
+        <a class="card tool-card" href="https://chromewebstore.google.com/search/Copyfish" target="_blank" rel="noopener"><b>🐟 Copyfish OCR</b><br><span style="color:var(--steel)">이미지·영상 속 텍스트 추출·번역</span></a>
+      </div>
+      </div>
+      <div style="height:4em"></div>
+
+      <h3>🌐 알아두면 좋은 유용한 사이트</h3>
+      <div class="grid">
+        <a class="card tool-card" href="https://donue.co.kr/service/signature/" target="_blank" rel="noopener"><b>✍️ 무료 전자서명·도장 만들기</b><br><span style="color:var(--steel)">donue.co.kr · 서명/도장 이미지 제작</span></a>
+        <a class="card tool-card" href="https://workspace.google.com/labs-sign-up/join" target="_blank" rel="noopener"><b>🧪 구글 실험실 (Workspace Labs)</b><br><span style="color:var(--steel)">구글의 새 AI 기능 미리 체험</span></a>
+        <a class="card tool-card" href="https://www.ilovepdf.com/ko" target="_blank" rel="noopener"><b>📄 아이러브PDF</b><br><span style="color:var(--steel)">PDF 합치기·분할·압축·변환</span></a>
+        <a class="card tool-card" href="https://blaze.today/" target="_blank" rel="noopener"><b>⚡ Text Blaze</b><br><span style="color:var(--steel)">자주 쓰는 문장·주소를 단축어로 저장</span></a>
+      </div>
+
+      <div style="text-align:center; background:linear-gradient(135deg,#FBEFD6,#FDF7EA); border:1px solid var(--beige-deep); border-radius:16px; padding:38px 24px; margin-top:3em">
+        <div style="font-size:1.3rem; color:var(--slate)">낯선 변화 앞에서 기꺼이 버튼을 눌러본 당신,</div>
+        <div style="font-family:var(--serif); font-size:1.9rem; font-weight:700; color:var(--primary-deep); margin:10px 0">오늘 누구보다 앞서갔습니다.</div>
+        <div style="font-size:1.3rem">응원합니다 🎉</div>
+      </div>
+      <div style="height:5em"></div>
+    </section>
+  </div>
+</div>
+
+</main>
+
+<div class="sunset-stripe"></div>
+<footer>
+  <div class="wrap">
+    <div class="fbrand"><span class="m"></span>인천 진로교사를 위한 바이브코딩 연수</div>
+    <small>예시 프롬프트는 <b>복사</b> 버튼으로 바로 사용하세요 · 생성형 AI가 주도하는 미래교실</small>
+  </div>
+</footer>
+
+<script>
+  // tab switching
+  var tabs = document.querySelectorAll('.tab');
+  var panels = document.querySelectorAll('.panel');
+  function buildTOC(){
+    var panel=document.querySelector('.panel.active');
+    var list=document.getElementById('tocList');
+    if(!panel||!list)return;
+    list.innerHTML='';

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>미래의 나 · 명함 만들기</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{min-height:100vh;font-family:'Pretendard','Malgun Gothic',sans-serif;
+    background:linear-gradient(135deg,#FDEBF2 0%,#EAF0FD 50%,#EAF9F1 100%);
+    display:flex;align-items:center;justify-content:center;padding:24px;color:#33323a}
+  .wrap{width:100%;max-width:520px}
+  h1{text-align:center;font-size:1.7rem;font-weight:800;margin-bottom:4px}
+  .sub{text-align:center;color:#8a8794;margin-bottom:22px}
+  .panel{background:#fff;border-radius:22px;box-shadow:0 12px 40px rgba(120,110,160,.18);padding:26px 24px}
+  label{display:block;font-size:.9rem;font-weight:700;color:#8a8794;margin:14px 0 5px}
+  input{width:100%;border:1.5px solid #E5DFEC;border-radius:12px;padding:13px 15px;font-size:16px;font-family:inherit}
+  input:focus{outline:none;border-color:#B58BE0}
+  .btn{width:100%;border:none;border-radius:14px;padding:15px;font-size:17px;font-weight:800;cursor:pointer;margin-top:20px;
+    background:linear-gradient(135deg,#B58BE0,#8AA6E8);color:#fff;box-shadow:0 8px 20px rgba(140,120,210,.3)}
+  .btn:hover{filter:brightness(1.05)}
+  .btn.ghost{background:#fff;color:#8AA6E8;border:1.5px solid #C9D6F2;box-shadow:none;margin-top:10px}
+  .hidden{display:none}
+  /* card */
+  #card{position:relative;border-radius:22px;padding:30px 28px;overflow:hidden;
+    background:linear-gradient(135deg,#FBE6F0 0%,#E7EEFC 100%);box-shadow:0 10px 30px rgba(120,110,160,.2)}
+  #card .emoji{font-size:2.4rem}
+  #card .name{font-family:'Noto Serif KR',serif;font-size:2.2rem;font-weight:800;color:#2c2a45;margin-top:6px;line-height:1.15}
+  #card .job{display:inline-block;margin-top:8px;background:#fff;color:#7a5bb0;font-weight:700;
+    border-radius:999px;padding:6px 16px;font-size:1.05rem;box-shadow:0 3px 10px rgba(0,0,0,.06)}
+  #card .line{height:1px;background:rgba(0,0,0,.1);margin:20px 0}
+  #card .field{margin:12px 0}
+  #card .field .l{font-size:.82rem;font-weight:800;color:#9a86c4;letter-spacing:.04em}
+  #card .field .v{font-size:1.12rem;margin-top:3px;color:#3a3852;line-height:1.5}
+  #card .tag{position:absolute;right:22px;bottom:18px;font-size:.8rem;color:#a79fc0;font-weight:600}
+  .result-actions{margin-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>✨ 미래의 나 · 명함 만들기</h1>
+  <p class="sub">10년 후의 나를 명함 한 장에 담아보세요.</p>
+
+  <!-- 입력 화면 -->
+  <div class="panel" id="form">
+    <label>이름</label>
+    <input id="name" placeholder="예: 이서연">
+    <label>희망 직업</label>
+    <input id="job" placeholder="예: 로봇공학 연구원">
+    <label>나의 좌우명</label>
+    <input id="motto" placeholder="예: 오늘의 한 걸음이 내일을 만든다">
+    <label>10년 후 목표</label>
+    <input id="goal" placeholder="예: 사람을 돕는 재활 로봇 개발하기">
+    <button class="btn" onclick="make()">🎴 명함 만들기</button>
+  </div>
+
+  <!-- 결과 화면 -->
+  <div class="panel hidden" id="output">
+    <div id="card">
+      <div class="emoji">💼✨</div>
+      <div class="name" id="c-name"></div>
+      <div class="job" id="c-job"></div>
+      <div class="line"></div>
+      <div class="field"><div class="l">MY MOTTO · 좌우명</div><div class="v" id="c-motto"></div></div>
+      <div class="field"><div class="l">10 YEARS LATER · 10년 후 목표</div><div class="v" id="c-goal"></div></div>
+      <div class="tag">미래의 나 · 2026</div>
+    </div>
+    <div class="result-actions">
+      <button class="btn" onclick="save()">📥 이미지로 저장</button>
+      <button class="btn ghost" onclick="reset()">↩ 다시 만들기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function v(id){return document.getElementById(id).value.trim();}
+function make(){
+  if(!v('name')){alert('이름을 입력해 주세요.');return;}
+  document.getElementById('c-name').textContent=v('name');
+  document.getElementById('c-job').textContent=v('job')||'미래의 나';
+  document.getElementById('c-motto').textContent=v('motto')||'—';
+  document.getElementById('c-goal').textContent=v('goal')||'—';
+  document.getElementById('form').classList.add('hidden');
+  document.getElementById('output').classList.remove('hidden');
+}
+function reset(){
+  document.getElementById('output').classList.add('hidden');
+  document.getElementById('form').classList.remove('hidden');
+}
+function save(){
+  var card=document.getElementById('card');
+  html2canvas(card,{scale:2,backgroundColor:null}).then(function(canvas){
+    var a=document.createElement('a');
+    a.download='미래의나_명함.png';
+    a.href=canvas.toDataURL('image/png');
+    a.click();
+  }).catch(function(){alert('저장이 안 되면 이 파일을 다운로드해 브라우저에서 열어 다시 시도해 주세요.');});
+}
+</script>
+</body>
+</html>
