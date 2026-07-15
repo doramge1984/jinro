@@ -1208,3 +1208,45 @@ HTML, CSS, JavaScript가 모두 포함된 하나의 완성된 코드 블록을 �
     var list=document.getElementById('tocList');
     if(!panel||!list)return;
     list.innerHTML='';
+    panel.querySelectorAll('h2, h3').forEach(function(h,i){
+      if(!h.id) h.id=panel.id+'-h'+i;
+      var a=document.createElement('a');
+      a.href='#'+h.id; a.className='toc-item '+(h.tagName==='H2'?'h2':'sub');
+      if(h.classList.contains('toc-red')) a.style.color='#c0392b';
+      if(h.classList.contains('toc-blue')) a.style.color='#1F5F9E';
+      if(h.classList.contains('toc-bold')) a.style.fontWeight='800';
+      a.textContent=h.textContent.replace(/\s+/g,' ').trim();
+      a.addEventListener('click',function(e){e.preventDefault(); h.scrollIntoView({behavior:'smooth',block:'start'});});
+      list.appendChild(a);
+    });
+  }
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(x){x.classList.remove('active')});
+      panels.forEach(function(p){p.classList.remove('active')});
+      t.classList.add('active');
+      document.getElementById(t.dataset.target).classList.add('active');
+      document.body.classList.toggle('home-active', t.dataset.target==='p-overview');
+      window.scrollTo({top:0, behavior:'smooth'});
+      buildTOC();
+    });
+  });
+  buildTOC();
+  document.body.classList.add('home-active');
+
+  // copy buttons
+  document.querySelectorAll('.prompt .copy').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      var block = btn.closest('.prompt').cloneNode(true);
+      block.querySelectorAll('.copy,.label').forEach(function(el){el.remove()});
+      var text = block.innerText.trim();
+      navigator.clipboard.writeText(text).then(function(){
+        var old = btn.textContent; btn.textContent = '복사됨 ✓';
+        setTimeout(function(){ btn.textContent = old; }, 1400);
+      });
+    });
+  });
+</script>
+</body>
+</html>
